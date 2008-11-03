@@ -1,0 +1,72 @@
+<!ENTITY dialog.title "Adblock Plus Tercihleri">
+<!ENTITY filters.label "Süzgeçler">
+<!ENTITY filters.accesskey "G">
+<!ENTITY add.label "Süzgeç ekle">
+<!ENTITY add.accesskey "K">
+<!ENTITY addsubscription.label "Süzgeç aboneliği ekle">
+<!ENTITY addsubscription.accesskey "E">
+<!ENTITY synchsubscriptions.label "Tüm abonelikleri güncelle">
+<!ENTITY synchsubscriptions.accesskey "C">
+<!ENTITY import.label "Süzgeçleri içe aktar">
+<!ENTITY import.accesskey "Z">
+<!ENTITY export.label "Süzgeçleri dışa aktar">
+<!ENTITY export.accesskey "D">
+<!ENTITY clearall.label "Tüm süzgeçleri kaldır">
+<!ENTITY clearall.accesskey "L">
+<!ENTITY resethitcounts.label "İstatistikleri sıfırla">
+<!ENTITY resethitcounts.accesskey "R">
+<!ENTITY edit.label "Düzen">
+<!ENTITY edit.accesskey "z">
+<!ENTITY cut.label "Kes">
+<!ENTITY cut.accesskey "e">
+<!ENTITY copy.label "Kopyala">
+<!ENTITY copy.accesskey "K">
+<!ENTITY paste.label "Yapıştır">
+<!ENTITY paste.accesskey "Y">
+<!ENTITY remove.label "Sil">
+<!ENTITY remove.accesskey "S">
+<!ENTITY menu.find.label "Bul">
+<!ENTITY menu.find.accesskey "B">
+<!ENTITY menu.findagain.label "Sonrakini bul">
+<!ENTITY menu.findagain.accesskey "A">
+<!ENTITY options.label "Seçenekler">
+<!ENTITY options.accesskey "S">
+<!ENTITY enable.label "Adblock Plus&apos;ı etkinleştir">
+<!ENTITY enable.accesskey "A">
+<!ENTITY showintoolbar.label "Araç çubuğunda göster">
+<!ENTITY showintoolbar.accesskey "R">
+<!ENTITY showinstatusbar.label "Durum çubuğunda göster">
+<!ENTITY showinstatusbar.accesskey "D">
+<!ENTITY objecttabs.label "Flash ve Java&apos;yı kulakçıklarla belirt">
+<!ENTITY objecttabs.accesskey "J">
+<!ENTITY collapse.label "Öğeleri kapat">
+<!ENTITY collapse.accesskey "T">
+<!ENTITY help.label "Yardım">
+<!ENTITY help.accesskey "A">
+<!ENTITY faq.label "Sıkça Sorulan Sorular">
+<!ENTITY faq.accesskey "S">
+<!ENTITY faq.url "http://adblockplus.org/en/faq">
+<!ENTITY tips.label "Bugünün İpucu">
+<!ENTITY tips.accesskey "B">
+<!ENTITY tips.url "http://adblockplus.org/en/tips">
+<!ENTITY filterdoc.label "Writing Adblock Plus filters">
+<!ENTITY filterdoc.accesskey "R">
+<!ENTITY filterdoc.url "http://adblockplus.org/en/filters">
+<!ENTITY about.label "Adblock Plus Hakkında">
+<!ENTITY about.accesskey "O">
+<!ENTITY disabled.warning "Adblock Plus şu an devre dışı. Listedeki süzgeçleri değiştirebilirsiniz. Ancak bunlar eklenti devreye girene kadar kullanılamayacak.">
+<!ENTITY description "Engellemek istediğiniz adresleri yazın. Öneriler için açılır menüye bakın. Daha genel süzgeçler tanımlamak için * işaretini kullanabilirsiniz. İleri düzeyde bilgiye sahip kullanıcılar düzenli ifadelere (ör. /reklam\d+\.gif$/) de başvurabilirler.">
+<!ENTITY pattern.column "Kural">
+<!ENTITY enabled.column "Etkinlik">
+<!ENTITY hitcount.column "İsabet">
+<!ENTITY lasthit.column "Son isabet">
+<!ENTITY context.edit.label "Süzgeci düzenle">
+<!ENTITY context.resethitcount.label "İstabet istatistiği sıfırlanacak olan süzgeç:">
+<!ENTITY context.synchsubscription.label "Aboneliği eşle">
+<!ENTITY context.editsubscription.label "Aboneliği düzenle">
+<!ENTITY context.moveup.label "Yukarıya taşı">
+<!ENTITY context.movedown.label "Aşağıya taşı">
+<!ENTITY context.movegroupup.label "Öbeği yukarıya taşı">
+<!ENTITY context.movegroupdown.label "Öbeği aşağıya taşı">
+<!ENTITY apply.label "Uygula">
+<!ENTITY apply.accesskey "u">

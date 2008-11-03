@@ -1,0 +1,74 @@
+<!ENTITY dialog.title "Adblock Plus - ustawienia">
+<!ENTITY filters.label "Filtry">
+<!ENTITY filters.accesskey "F">
+<!ENTITY add.label "Dodaj filtr">
+<!ENTITY add.accesskey "D">
+<!ENTITY addsubscription.label "Dodaj subskrypcję filtrów">
+<!ENTITY addsubscription.accesskey "S">
+<!ENTITY synchsubscriptions.label "Aktualizuj wszystkie subskrypcje">
+<!ENTITY synchsubscriptions.accesskey "U">
+<!ENTITY import.label "Importuj filtry">
+<!ENTITY import.accesskey "M">
+<!ENTITY export.label "Eksportuj filtry">
+<!ENTITY export.accesskey "E">
+<!ENTITY clearall.label "Usuń wszystkie filtry">
+<!ENTITY clearall.accesskey "L">
+<!ENTITY resethitcounts.label "Wyzeruj licznik użycia filtru">
+<!ENTITY resethitcounts.accesskey "W">
+<!ENTITY edit.label "Edycja">
+<!ENTITY edit.accesskey "E">
+<!ENTITY cut.label "Wytnij">
+<!ENTITY cut.accesskey "T">
+<!ENTITY copy.label "Kopiuj">
+<!ENTITY copy.accesskey "K">
+<!ENTITY paste.label "Wklej">
+<!ENTITY paste.accesskey "E">
+<!ENTITY remove.label "Usuń">
+<!ENTITY remove.accesskey "U">
+<!ENTITY menu.find.label "Znajdź">
+<!ENTITY menu.find.accesskey "Z">
+<!ENTITY menu.findagain.label "Znajdź następne">
+<!ENTITY menu.findagain.accesskey "N">
+<!ENTITY options.label "Opcje">
+<!ENTITY options.accesskey "O">
+<!ENTITY enable.label "Włącz Adblock Plus">
+<!ENTITY enable.accesskey "W">
+<!ENTITY showintoolbar.label "Wyświetl ikonę Adblock Plusa na pasku narzędziowym">
+<!ENTITY showintoolbar.accesskey "D">
+<!ENTITY showinstatusbar.label "Wyświetl ikonę Adblock Plusa na pasku stanu">
+<!ENTITY showinstatusbar.accesskey "N">
+<!ENTITY objecttabs.label "Pokaż przyciski blokowania na elementach Flasha i Javy">
+<!ENTITY objecttabs.accesskey "K">
+<!ENTITY collapse.label "Ukryj zablokowane elementy">
+<!ENTITY collapse.accesskey "U">
+<!ENTITY help.label "Pomoc">
+<!ENTITY help.accesskey "P">
+<!ENTITY faq.label "Często zadawane pytania">
+<!ENTITY faq.accesskey "T">
+<!ENTITY faq.url "http://adblockplus.org/en/faq">
+<!ENTITY tips.label "Podpowiedź dnia">
+<!ENTITY tips.accesskey "D">
+<!ENTITY tips.url "http://adblockplus.org/en/tips">
+<!ENTITY filterdoc.label "Tworzenie filtrów">
+<!ENTITY filterdoc.accesskey "R">
+<!ENTITY filterdoc.url "http://adblockplus.org/en/filters">
+<!ENTITY about.label "O Adblock Plus">
+<!ENTITY about.accesskey "O">
+<!ENTITY disabled.warning "Adblock Plus jest wyłączony. Można edytować dowolny filtr, ale do czasu ponownego włączenia Adblocka zmiany te nie będą działały.">
+<!ENTITY description "Dodaj adres, który chcesz zablokować. Aby zobaczyć podpowiedzi przejdź do menu &quot;Pomoc&quot;.
+		Można używać * jako wieloznacznika przy tworzeniu większej ilości filtrów. Zaawansowani użytkownicy
+		mogą używać wyrażeń regularnych takich jak: /banner\d+\.gif$/.">
+<!ENTITY pattern.column "Reguła filtru">
+<!ENTITY enabled.column "Aktywny">
+<!ENTITY hitcount.column "Użycie">
+<!ENTITY lasthit.column "Ostatnie uderzenie(trafienie)">
+<!ENTITY context.edit.label "Edytuj filtr">
+<!ENTITY context.resethitcount.label "Wyzeruj licznik użycia dla filtru">
+<!ENTITY context.synchsubscription.label "Aktualizuj subskrypcję teraz">
+<!ENTITY context.editsubscription.label "Edytuj subskrypcję">
+<!ENTITY context.moveup.label "Przesuń w górę">
+<!ENTITY context.movedown.label "Przesuń w dół">
+<!ENTITY context.movegroupup.label "Przesuń grupę w górę">
+<!ENTITY context.movegroupdown.label "Przesuń grupę w dól">
+<!ENTITY apply.label "Zastosuj">
+<!ENTITY apply.accesskey "S">

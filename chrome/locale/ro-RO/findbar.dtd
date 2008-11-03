@@ -1,0 +1,14 @@
+<!ENTITY find.label "Caută:">
+<!ENTITY findNext.label "Caută următorul">
+<!ENTITY findNext.accesskey "C">
+<!ENTITY findNext.tooltip "Caută următoarea apariţie a termenului de căutare">
+<!ENTITY findPrevious.label "Caută înapoi">
+<!ENTITY findPrevious.accesskey "a">
+<!ENTITY findPrevious.tooltip "Caută precedenta apariţie a termenului de căutare">
+<!ENTITY findCloseButton.tooltip "Închide bara de căutare">
+<!ENTITY highlight.label "Evidenţiază">
+<!ENTITY highlight.accesskey "E">
+<!ENTITY highlight.tooltip "Evidenţiază toate apariţiile termenului de căutare (Ctrl-Enter)">
+<!ENTITY highlight.macTooltip "Evidenţiază toate apariţiile termenului de căutare (Cmd+Return)">
+<!ENTITY caseSensitiveCheckbox.label "Dif. majuscule/minuscule">
+<!ENTITY caseSensitiveCheckbox.accesskey "D">

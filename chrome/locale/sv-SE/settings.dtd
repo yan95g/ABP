@@ -1,0 +1,72 @@
+<!ENTITY dialog.title "Adblock Plus inställningar">
+<!ENTITY filters.label "Filter">
+<!ENTITY filters.accesskey "F">
+<!ENTITY add.label "Lägg till filter">
+<!ENTITY add.accesskey "ä">
+<!ENTITY addsubscription.label "Lägg till filterprenumeration">
+<!ENTITY addsubscription.accesskey "p">
+<!ENTITY synchsubscriptions.label "Uppdatera alla filter">
+<!ENTITY synchsubscriptions.accesskey "d">
+<!ENTITY import.label "Importera filter">
+<!ENTITY import.accesskey "I">
+<!ENTITY export.label "Exportera filter">
+<!ENTITY export.accesskey "E">
+<!ENTITY clearall.label "Ta bort alla filter">
+<!ENTITY clearall.accesskey "T">
+<!ENTITY resethitcounts.label "Nollställ statistik - Antal träffar">
+<!ENTITY resethitcounts.accesskey "r">
+<!ENTITY edit.label "Redigera">
+<!ENTITY edit.accesskey "R">
+<!ENTITY cut.label "Klipp ut">
+<!ENTITY cut.accesskey "K">
+<!ENTITY copy.label "Kopiera">
+<!ENTITY copy.accesskey "o">
+<!ENTITY paste.label "Klistra in">
+<!ENTITY paste.accesskey "l">
+<!ENTITY remove.label "Ta bort">
+<!ENTITY remove.accesskey "T">
+<!ENTITY menu.find.label "Sök">
+<!ENTITY menu.find.accesskey "S">
+<!ENTITY menu.findagain.label "Sök igen">
+<!ENTITY menu.findagain.accesskey "g">
+<!ENTITY options.label "Alternativ">
+<!ENTITY options.accesskey "n">
+<!ENTITY enable.label "Adblock Plus på">
+<!ENTITY enable.accesskey "å">
+<!ENTITY showintoolbar.label "Visa i verktygsfält">
+<!ENTITY showintoolbar.accesskey "y">
+<!ENTITY showinstatusbar.label "Visa i statusfält">
+<!ENTITY showinstatusbar.accesskey "s">
+<!ENTITY objecttabs.label "Visa flik vid Flash- och Java-reklam">
+<!ENTITY objecttabs.accesskey "V">
+<!ENTITY collapse.label "Dölj blockerade element">
+<!ENTITY collapse.accesskey "l">
+<!ENTITY help.label "Hjälp">
+<!ENTITY help.accesskey "H">
+<!ENTITY faq.label "FAQ">
+<!ENTITY faq.accesskey "Q">
+<!ENTITY faq.url "http://adblockplus.org/en/faq">
+<!ENTITY tips.label "Dagens tips">
+<!ENTITY tips.accesskey "i">
+<!ENTITY tips.url "http://adblockplus.org/en/tips">
+<!ENTITY filterdoc.label "Sparar Adblock Plus-filter">
+<!ENTITY filterdoc.accesskey "r">
+<!ENTITY filterdoc.url "http://adblockplus.org/en/filters">
+<!ENTITY about.label "Om Adblock Plus">
+<!ENTITY about.accesskey "O">
+<!ENTITY disabled.warning "Adblock Plus är av. Du kan ändra filter i listan men tas inte i bruk förrän du slår på Adblock Plus.">
+<!ENTITY description "Lägg till adresser du vill blockera (ex. finns listrutan). Du kan använda * som flagga för att skapa mer generella filter. Avancerade användare an använda reguljära uttryck som /banner/d+/.gif$/.">
+<!ENTITY pattern.column "Filterregler">
+<!ENTITY enabled.column "På">
+<!ENTITY hitcount.column "Träffar">
+<!ENTITY lasthit.column "Senaste träff">
+<!ENTITY context.edit.label "Ändra filter">
+<!ENTITY context.resethitcount.label "Nollställ statistik - Antal träffar med filter">
+<!ENTITY context.synchsubscription.label "Uppdatera prenumeration nu">
+<!ENTITY context.editsubscription.label "Ändra prenumeration">
+<!ENTITY context.moveup.label "Flytta upp">
+<!ENTITY context.movedown.label "Flytta ner">
+<!ENTITY context.movegroupup.label "Flytta upp grupp">
+<!ENTITY context.movegroupdown.label "Flytta ner grupp">
+<!ENTITY apply.label "Verkställ">
+<!ENTITY apply.accesskey "V">

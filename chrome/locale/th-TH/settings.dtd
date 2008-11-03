@@ -1,0 +1,72 @@
+<!ENTITY dialog.title "ปรับแต่ง Adblock Plus">
+<!ENTITY filters.label "ตัวกรอง">
+<!ENTITY filters.accesskey "F">
+<!ENTITY add.label "เพิ่มตัวกรอง">
+<!ENTITY add.accesskey "Z">
+<!ENTITY addsubscription.label "เพิ่มนามข้างท้ายตัวกรอง">
+<!ENTITY addsubscription.accesskey "S">
+<!ENTITY synchsubscriptions.label "อัปเดตนามข้างท้ายทั้งหมด">
+<!ENTITY synchsubscriptions.accesskey "D">
+<!ENTITY import.label "นำเข้าตัวกรอง">
+<!ENTITY import.accesskey "M">
+<!ENTITY export.label "ส่งออกตัวกรอง">
+<!ENTITY export.accesskey "X">
+<!ENTITY clearall.label "ลบตัวกรองทั้งหมด">
+<!ENTITY clearall.accesskey "L">
+<!ENTITY resethitcounts.label "เริ่มสถิติใหม่">
+<!ENTITY resethitcounts.accesskey "R">
+<!ENTITY edit.label "แก้ไข">
+<!ENTITY edit.accesskey "E">
+<!ENTITY cut.label "ตัด">
+<!ENTITY cut.accesskey "T">
+<!ENTITY copy.label "คัดลอก">
+<!ENTITY copy.accesskey "C">
+<!ENTITY paste.label "วาง">
+<!ENTITY paste.accesskey "P">
+<!ENTITY remove.label "ลบ">
+<!ENTITY remove.accesskey "D">
+<!ENTITY menu.find.label "ค้นหา">
+<!ENTITY menu.find.accesskey "F">
+<!ENTITY menu.findagain.label "ค้นหาอีกครั้ง">
+<!ENTITY menu.findagain.accesskey "G">
+<!ENTITY options.label "ตัวเลือก">
+<!ENTITY options.accesskey "O">
+<!ENTITY enable.label "เปิดการใช้งาน Adblock Plus">
+<!ENTITY enable.accesskey "N">
+<!ENTITY showintoolbar.label "แสดงในแถบเครื่องมือ">
+<!ENTITY showintoolbar.accesskey "B">
+<!ENTITY showinstatusbar.label "แสดงในแถบสถานะ">
+<!ENTITY showinstatusbar.accesskey "S">
+<!ENTITY objecttabs.label "แสดงแท็บบนแฟลชและจาวา">
+<!ENTITY objecttabs.accesskey "T">
+<!ENTITY collapse.label "ย่อเก็บส่วนย่อยที่ถูกบล็อก">
+<!ENTITY collapse.accesskey "L">
+<!ENTITY help.label "ช่วยเหลือ">
+<!ENTITY help.accesskey "H">
+<!ENTITY faq.label "คำถามพบบ่อย">
+<!ENTITY faq.accesskey "F">
+<!ENTITY faq.url "http://adblockplus.org/en/faq">
+<!ENTITY tips.label "เคล็ดลับประจำวัน">
+<!ENTITY tips.accesskey "T">
+<!ENTITY tips.url "http://adblockplus.org/en/tips">
+<!ENTITY filterdoc.label "กำลังเขียนตัวกรอง Adblock Plus">
+<!ENTITY filterdoc.accesskey "R">
+<!ENTITY filterdoc.url "http://adblockplus.org/en/filters">
+<!ENTITY about.label "เกี่ยวกับ Adblock Plus">
+<!ENTITY about.accesskey "B">
+<!ENTITY disabled.warning "Adblock Plus ถูกปิดการทำงาน คุณสามารถแก้ไขตัวกรองในรายชื่อ แต่จะใช้ไม่ได้จนกว่าคุณจะเปิดการทำงานอีกครั้ง">
+<!ENTITY description "เพิ่มที่อยู่ที่คุณต้องการบล็อก สำหรับข้อเสนอแนะดูที่รายชื่อแบบเลื่อนลง คุณสามารถใช้ * เป็นเสมือนสิ่งใดๆเพื่อสร้างตัวกรองที่ำไม่เจาะจง ผู้ใช้ขั้นสูงสามารถใช้การแสดงออกทั่วไปเช่น banner\d+\.gif$/">
+<!ENTITY pattern.column "กฎตัวกรอง">
+<!ENTITY enabled.column "เปิดการใช้งาน">
+<!ENTITY hitcount.column "นับ">
+<!ENTITY lasthit.column "กดล่าสุด">
+<!ENTITY context.edit.label "แก้ไขตัวกรอง">
+<!ENTITY context.resethitcount.label "เริ่มนับสถิติสำหรับตัวกรองใหม่">
+<!ENTITY context.synchsubscription.label "อัปเดตนามข้างท้าย">
+<!ENTITY context.editsubscription.label "แก้ไขนามข้างท้าย">
+<!ENTITY context.moveup.label "เลื่อนขึ้น">
+<!ENTITY context.movedown.label "เลื่อนลง">
+<!ENTITY context.movegroupup.label "เลื่อนกลุ่มขึ้น">
+<!ENTITY context.movegroupdown.label "เลื่อนกลุ่มลง">
+<!ENTITY apply.label "ใช้งาน">
+<!ENTITY apply.accesskey "P">

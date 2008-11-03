@@ -1,0 +1,14 @@
+<!ENTITY find.label "Znajdź:">
+<!ENTITY findNext.label "Znajdź następne">
+<!ENTITY findNext.accesskey "n">
+<!ENTITY findNext.tooltip "Wyszukuje następne wystąpienie ostatnio szukanej frazy">
+<!ENTITY findPrevious.label "Znajdź poprzednie">
+<!ENTITY findPrevious.accesskey "p">
+<!ENTITY findPrevious.tooltip "Wyszukuje poprzednie wystąpienie ostatnio szukanej frazy">
+<!ENTITY findCloseButton.tooltip "Zamknij pasek wyszukiwania">
+<!ENTITY highlight.label "Podświetl">
+<!ENTITY highlight.accesskey "w">
+<!ENTITY highlight.tooltip "Podświetla wszystkie wystąpienia szukanej frazy (Ctrl+Enter)">
+<!ENTITY highlight.macTooltip "Podświetla wszystkie wystąpienia szukanej frazy (Cmd+Return)">
+<!ENTITY caseSensitiveCheckbox.label "Uwzględniaj wielkość liter">
+<!ENTITY caseSensitiveCheckbox.accesskey "l">
