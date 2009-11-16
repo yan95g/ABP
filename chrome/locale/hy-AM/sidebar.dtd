@@ -8,14 +8,15 @@
 <!ENTITY filter.label "Ազդող ֆիլտրը">
 <!ENTITY state.label "Վիճակը">
 <!ENTITY size.label "Չափը">
+<!ENTITY docDomain.label "Աշխատանքի աղբյուրը">
 <!ENTITY noitems.label "Ֆիլտրվվող տարրեր չկան">
 <!ENTITY whitelisted.label "Բացառություն">
-<!ENTITY notloaded.label "«Adblock Plus»ը նորմալ տեղադրվել է">
 <!ENTITY tooltip.address.label "Հասցեն`">
 <!ENTITY tooltip.type.label "Տեսակը`">
 <!ENTITY tooltip.type.blocked "(ֆիլտրված)">
 <!ENTITY tooltip.type.whitelisted "(բացառություն)">
 <!ENTITY tooltip.size.label "Չափը`">
+<!ENTITY tooltip.docDomain.label "Աշխատանքի աղբյուրը`">
 <!ENTITY tooltip.filter.label "Ազդող ֆիլտրը`">
 <!ENTITY tooltip.filterSource.label "Ֆիլտրի աղբյուրը`">
 <!ENTITY context.block.label "Ֆիլտրել այս տարրը">
@@ -24,7 +25,6 @@
 <!ENTITY context.disablefilter.label "Անջատել ֆիլտրը --">
 <!ENTITY context.enablefilter.label "Վերակտիվացնել ֆիլտրը --">
 <!ENTITY context.disablefilteronsite.label "Արգելել այս ֆիլտրը -- -ում">
-<!ENTITY context.enablefilteronsite.label "Թույլատրել այս ֆիլտրը -- -ում">
 <!ENTITY context.open.label "Բացել նոր Թաբում">
 <!ENTITY context.flash.label "Ցույց տալ օբյեկտը էջում">
 <!ENTITY context.copy.label "Կրկնել տարրի հասցեն">

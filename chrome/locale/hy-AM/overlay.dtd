@@ -1,5 +1,3 @@
-<!ENTITY notloaded.label "Բեռնված չէ">
-<!ENTITY notloaded.tooltip "«Adblock Plus»ի չի կարող լրիվ բեռնվել, հնարավոր է լավ չէ տեղադրված:">
 <!ENTITY status.tooltip "Վիճակը.">
 <!ENTITY blocked.tooltip "Այս էջի ֆիլտրված տարրերը`">
 <!ENTITY filters.tooltip "Ամենաակտիվ ֆիլտրերը`">
@@ -10,12 +8,15 @@
 <!ENTITY context.image.label "Adblock` Ֆիլտրել Նկարը">
 <!ENTITY context.object.label "Adblock` Ֆիլտրել Օբյեկտը">
 <!ENTITY context.frame.label "Adblock` Ֆիլտրել Ֆրեյմը">
+<!ENTITY context.removeWhitelist.label "Adblock Plus: Վերակտիվացնել այս էջում">
 <!ENTITY sidebar.title "Այս էջի ֆիլտրվող տարրերը">
 <!ENTITY settings.label "Նախընտրանքներ">
 <!ENTITY settings.accesskey "Ն">
 <!ENTITY opensidebar.label "Բացել ֆիլտրվող տարրերը">
+<!--  Note: This access key should usually be the same as closesidebar.accesskey. It is the same menu item with different label depending on whether the sidebar is currently open. -->
 <!ENTITY opensidebar.accesskey "տ">
 <!ENTITY closesidebar.label "Փակել ֆիլտրվող տարրերը">
+<!--  Note: This access key should usually be the same as opensidebar.accesskey. It is the same menu item with different label depending on whether the sidebar is currently open. -->
 <!ENTITY closesidebar.accesskey "տ">
 <!ENTITY whitelist.site.label "Անջատել այս կայքում">
 <!ENTITY whitelist.page.label "Անջատել միայն այս էջի համար">

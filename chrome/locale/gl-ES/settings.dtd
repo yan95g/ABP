@@ -53,12 +53,12 @@
 <!ENTITY collapse.accesskey "L">
 <!ENTITY help.label "Axuda">
 <!ENTITY help.accesskey "X">
+<!ENTITY gettingStarted.label "Primeiros pasos">
+<!ENTITY gettingStarted.accesskey "p">
+<!ENTITY gettingStarted.url "primeirosPasos.url">
 <!ENTITY faq.label "Preguntas frecuentes (FAQ)">
 <!ENTITY faq.accesskey "F">
 <!ENTITY faq.url "http://adblockplus.org/en/faq">
-<!ENTITY tips.label "Suxestión do día">
-<!ENTITY tips.accesskey "d">
-<!ENTITY tips.url "http://adblockplus.org/en/tips">
 <!ENTITY filterdoc.label "Escribir filtros de Adblock Plus">
 <!ENTITY filterdoc.accesskey "R">
 <!ENTITY filterdoc.url "http://adblockplus.org/en/filters">
@@ -67,6 +67,8 @@
 <!ENTITY description "Os seguintes filtros determinan que enderezos débense bloquear e cales débense permitir:">
 <!ENTITY filter.column "Regra de filtro">
 <!ENTITY filter.accesskey "F">
+<!ENTITY slow.column "Filtros lentos">
+<!ENTITY slow.accesskey "n">
 <!ENTITY enabled.column "Activada">
 <!ENTITY enabled.accesskey "c">
 <!ENTITY hitcount.column "Impactos">
@@ -74,7 +76,7 @@
 <!ENTITY lasthit.column "Último impacto">
 <!ENTITY lasthit.accesskey "L">
 <!ENTITY context.edit.label "Editar filtro">
-<!ENTITY context.resethitcount.label "Reinicciar a estatística de impactos do filtro">
+<!ENTITY context.resethitcount.label "Reiniciar a estatística de impactos do filtro">
 <!ENTITY context.synchsubscription.label "Actualizar subscrición">
 <!ENTITY context.editsubscription.label "Editar subscrición">
 <!ENTITY context.moveup.label "Mover filtro arriba">

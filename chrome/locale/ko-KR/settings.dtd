@@ -53,12 +53,12 @@
 <!ENTITY collapse.accesskey "L">
 <!ENTITY help.label "도움말">
 <!ENTITY help.accesskey "H">
+<!ENTITY gettingStarted.label "시작하기">
+<!ENTITY gettingStarted.accesskey "s">
+<!ENTITY gettingStarted.url "http://adblockplus.org/en/getting_started">
 <!ENTITY faq.label "자주 묻는 질문">
 <!ENTITY faq.accesskey "F">
 <!ENTITY faq.url "http://adblockplus.org/en/faq">
-<!ENTITY tips.label "오늘의 팁">
-<!ENTITY tips.accesskey "T">
-<!ENTITY tips.url "http://adblockplus.org/en/tips">
 <!ENTITY filterdoc.label "Adblock Plus 필터 기록">
 <!ENTITY filterdoc.accesskey "R">
 <!ENTITY filterdoc.url "http://adblockplus.org/en/filters">
@@ -69,6 +69,8 @@
 		고급 사용자는 정규표현식을 사용할 수 있습니다.(예: /banner\d+\.gif$/)">
 <!ENTITY filter.column "필터 규칙">
 <!ENTITY filter.accesskey "F">
+<!ENTITY slow.column "느린 필터">
+<!ENTITY slow.accesskey "w">
 <!ENTITY enabled.column "사용">
 <!ENTITY enabled.accesskey "n">
 <!ENTITY hitcount.column "히트">

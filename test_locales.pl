@@ -4,7 +4,7 @@ use strict;
 
 my %paths = (
   abp => 'chrome/locale',
-  ehh => 'elemhidehelper/chrome/locale',
+  ehh => '../elemhidehelper/chrome/locale',
 );
 
 my @must_differ = (
@@ -12,11 +12,10 @@ my @must_differ = (
   ['abp:settings:filters.accesskey', 'abp:settings:edit.accesskey', 'abp:settings:view.accesskey', 'abp:settings:options.accesskey', 'abp:settings:help.accesskey', 'abp:settings:add.accesskey', 'abp:settings:apply.accesskey'],
   ['abp:settings:add.accesskey', 'abp:settings:addsubscription.accesskey', 'abp:settings:synchsubscriptions.accesskey', 'abp:settings:import.accesskey', 'abp:settings:export.accesskey', 'abp:settings:clearall.accesskey', 'abp:settings:resethitcounts.accesskey'],
   ['abp:settings:cut.accesskey', 'abp:settings:copy.accesskey', 'abp:settings:paste.accesskey', 'abp:settings:remove.accesskey', 'abp:settings:menu.find.accesskey', 'abp:settings:menu.findagain.accesskey'],
-  ['abp:settings:filter.accesskey', 'abp:settings:enabled.accesskey', 'abp:settings:hitcount.accesskey', 'abp:settings:lasthit.accesskey', 'abp:settings:sort.accesskey'],
-  ['abp:settings:sort.none.accesskey', 'abp:settings:filter.accesskey', 'abp:settings:enabled.accesskey', 'abp:settings:hitcount.accesskey', 'abp:settings:lasthit.accesskey', 'abp:settings:sort.ascending.accesskey', 'abp:settings:sort.descending.accesskey'],
+  ['abp:settings:filter.accesskey', 'abp:settings:slow.accesskey', 'abp:settings:enabled.accesskey', 'abp:settings:hitcount.accesskey', 'abp:settings:lasthit.accesskey', 'abp:settings:sort.accesskey'],
+  ['abp:settings:sort.none.accesskey', 'abp:settings:filter.accesskey', 'abp:settings:slow.accesskey', 'abp:settings:enabled.accesskey', 'abp:settings:hitcount.accesskey', 'abp:settings:lasthit.accesskey', 'abp:settings:sort.ascending.accesskey', 'abp:settings:sort.descending.accesskey'],
   ['abp:settings:enable.accesskey', 'abp:settings:showintoolbar.accesskey', 'abp:settings:showinstatusbar.accesskey', 'abp:settings:objecttabs.accesskey', 'abp:settings:collapse.accesskey'],
   ['abp:settings:gettingStarted.accesskey', 'abp:settings:faq.accesskey', 'abp:settings:filterdoc.accesskey', 'abp:settings:about.accesskey'],
-  ['abp:findbar:next.accesskey', 'abp:findbar:previous.accesskey', 'abp:findbar:highlight.accesskey'],
   ['abp:subscription:location.accesskey', 'abp:subscription:title.accesskey', 'abp:subscription:autodownload.accesskey', 'abp:subscription:enabled.accesskey'],
   ['abp:composer:filter.accesskey', 'abp:composer:preferences.accesskey', 'abp:composer:type.filter.accesskey', 'abp:composer:type.whitelist.accesskey', 'abp:composer:custom.pattern.accesskey', 'abp:composer:anchor.start.accesskey', 'abp:composer:anchor.end.accesskey', 'abp:composer:domainRestriction.accesskey', 'abp:composer:firstParty.accesskey', 'abp:composer:thirdParty.accesskey', 'abp:composer:matchCase.accesskey', 'abp:composer:collapse.accesskey'],
   ['ehh:global:command.select.key', 'ehh:global:command.wider.key', 'ehh:global:command.narrower.key', 'ehh:global:command.quit.key', 'ehh:global:command.blinkElement.key', 'ehh:global:command.viewSource.key', 'ehh:global:command.viewSourceWindow.key', 'ehh:global:command.showMenu.key'],
@@ -24,6 +23,7 @@ my @must_differ = (
 
 my @must_equal = (
   ['abp:overlay:opensidebar.accesskey', 'abp:overlay:closesidebar.accesskey'],
+  ['abp:composer:anchor.start.accesskey', 'abp:composer:anchor.start.flexible.accesskey'],
   ['ehh:overlay:selectelement.accesskey', 'ehh:overlay:stopselection.accesskey'],
 );
 
@@ -110,7 +110,7 @@ foreach my $locale (@locales)
       {
         if (exists($keepAccessKeys{$locale}))
         {
-          if (exists($referenceLocale->{$file}{$key}) && $fileData->{$key} ne $referenceLocale->{$file}{$key})
+          if (exists($referenceLocale->{$file}{$key}) && lc($fileData->{$key}) ne lc($referenceLocale->{$file}{$key}))
           {
             print "$locale: Accesskey '$file:$key' should be the same as in the reference locale\n";
           }
@@ -146,7 +146,7 @@ sub makeLocaleList
   my %locales = ();
   foreach my $dir (keys %paths)
   {
-    opendir(local* DIR, $paths{$dir}) or die "Could not open directory $paths{$dir}";
+    opendir(local* DIR, $paths{$dir}) or next;
     my @locales = grep {!/[^\w\-]/ && !-e("$paths{$dir}/$_/.incomplete")} readdir(DIR);
     $locales{$_} = 1 foreach @locales;
     closedir(DIR);

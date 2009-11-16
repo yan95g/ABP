@@ -8,14 +8,15 @@
 <!ENTITY filter.label "Filtru">
 <!ENTITY state.label "Stare">
 <!ENTITY size.label "Mărime">
+<!ENTITY docDomain.label "Sursă document">
 <!ENTITY noitems.label "Nici un element blocabil">
 <!ENTITY whitelisted.label "Pagini sigure">
-<!ENTITY notloaded.label "Adblock Plus nu este instalat corespunzător">
 <!ENTITY tooltip.address.label "Adresă:">
 <!ENTITY tooltip.type.label "Tip:">
 <!ENTITY tooltip.type.blocked "(blocat)">
 <!ENTITY tooltip.type.whitelisted "(permis)">
 <!ENTITY tooltip.size.label "Mărime">
+<!ENTITY tooltip.docDomain.label "Sursă document:">
 <!ENTITY tooltip.filter.label "Filtru în acţiune:">
 <!ENTITY tooltip.filterSource.label "Sursă filtru:">
 <!ENTITY context.block.label "Blochează element">
@@ -23,6 +24,7 @@
 <!ENTITY context.whitelist.label "Adaugă regulă excepţie pentru element">
 <!ENTITY context.disablefilter.label "Dezactivează filtru --">
 <!ENTITY context.enablefilter.label "Reactivează filtru --">
+<!ENTITY context.disablefilteronsite.label "Dezactivează acest filtru pe --">
 <!ENTITY context.open.label "Deschide în filă nouă">
 <!ENTITY context.flash.label "Evidenţiază marginile elementelor">
 <!ENTITY context.copy.label "Copiază adresa elementului">

@@ -8,6 +8,7 @@
   <script type="text/javascript" src="/content/MochiKit/MochiKit.js"></script>
   <script type="text/javascript" src="/content/tests/SimpleTest/SimpleTest.js"></script>        
 
+  <meta http-equiv="Content-Type" value="text/html; charset=utf-8"/>
   <script type="application/x-javascript;version=1.7" src="common.js"></script>
   <script type="application/x-javascript;version=1.7" src="chrome://adblockplus/content/filterClasses.js"></script>
 </head>
@@ -38,6 +39,36 @@
     testMatch("|http://abc", "http://abc/adf", "IMAGE", null, false, true);
     testMatch("abc|", "http://abc/adf", "IMAGE", null, false, false);
     testMatch("abc/adf|", "http://abc/adf", "IMAGE", null, false, true);
+    testMatch("||example.com/foo", "http://example.com/foo/bar", "IMAGE", null, false, true);
+    testMatch("||com/foo", "http://example.com/foo/bar", "IMAGE", null, false, true);
+    testMatch("||mple.com/foo", "http://example.com/foo/bar", "IMAGE", null, false, false);
+    testMatch("||/example.com/foo", "http://example.com/foo/bar", "IMAGE", null, false, false);
+    testMatch("||example.com/foo/bar|", "http://example.com/foo/bar", "IMAGE", null, false, true);
+    testMatch("||example.com/foo", "http://foo.com/http://example.com/foo/bar", "IMAGE", null, false, false);
+    testMatch("||example.com/foo|", "http://example.com/foo/bar", "IMAGE", null, false, false);
+    testMatch("abc^d", "http://abc/def", "IMAGE", null, false, true);
+    testMatch("abc^e", "http://abc/def", "IMAGE", null, false, false);
+    testMatch("def^", "http://abc/def", "IMAGE", null, false, true);
+    testMatch("http://abc/d^f", "http://abc/def", "IMAGE", null, false, false);
+    testMatch("http://abc/def^", "http://abc/def", "IMAGE", null, false, true);
+    testMatch("^foo=bar^", "http://abc/?foo=bar", "IMAGE", null, false, true);
+    testMatch("^foo=bar^", "http://abc/?a=b&foo=bar", "IMAGE", null, false, true);
+    testMatch("^foo=bar^", "http://abc/?foo=bar&a=b", "IMAGE", null, false, true);
+    testMatch("^foo=bar^", "http://abc/?notfoo=bar", "IMAGE", null, false, false);
+    testMatch("^foo=bar^", "http://abc/?foo=barnot", "IMAGE", null, false, false);
+    testMatch("^foo=bar^", "http://abc/?foo=bar%2Enot", "IMAGE", null, false, false);
+    testMatch("||example.com^", "http://example.com/foo/bar", "IMAGE", null, false, true);
+    testMatch("||example.com^", "http://example.company.com/foo/bar", "IMAGE", null, false, false);
+    testMatch("||example.com^", "http://example.com:1234/foo/bar", "IMAGE", null, false, true);
+    testMatch("||example.com^", "http://example.com.com/foo/bar", "IMAGE", null, false, false);
+    testMatch("||example.com^", "http://example.com-company.com/foo/bar", "IMAGE", null, false, false);
+    testMatch("||example.com^foo", "http://example.com/foo/bar", "IMAGE", null, false, true);
+    testMatch("||пример.ру^", "http://пример.ру/foo/bar", "IMAGE", null, false, true);
+    testMatch("||пример.ру^", "http://пример.руководитель.ру/foo/bar", "IMAGE", null, false, false);
+    testMatch("||пример.ру^", "http://пример.ру:1234/foo/bar", "IMAGE", null, false, true);
+    testMatch("||пример.ру^", "http://пример.ру.ру/foo/bar", "IMAGE", null, false, false);
+    testMatch("||пример.ру^", "http://пример.ру-ководитель.ру/foo/bar", "IMAGE", null, false, false);
+    testMatch("||пример.ру^foo", "http://пример.ру/foo/bar", "IMAGE", null, false, true);
     testMatch("abc*d", "http://abc/adf", "IMAGE", null, false, true);
     testMatch("abc*d", "http://abcd/af", "IMAGE", null, false, true);
     testMatch("abc*d", "http://abc/d/af", "IMAGE", null, false, true);
@@ -69,24 +100,33 @@
     testMatch("abc$background", "http://abc/adf", "IMAGE", null, false, false);
     testMatch("abc$background", "http://abc/adf", "BACKGROUND", null, false, true);
     testMatch("abc$~background", "http://abc/adf", "BACKGROUND", null, false, false);
-    if (compareGeckoVersion("1.9") >= 0)
+    testMatch("abc$xbl", "http://abc/adf", "IMAGE", null, false, false);
+    testMatch("abc$xbl", "http://abc/adf", "XBL", null, false, true);
+    testMatch("abc$~xbl", "http://abc/adf", "XBL", null, false, false);
+    testMatch("abc$ping", "http://abc/adf", "IMAGE", null, false, false);
+    testMatch("abc$ping", "http://abc/adf", "PING", null, false, true);
+    testMatch("abc$~ping", "http://abc/adf", "PING", null, false, false);
+    testMatch("abc$xmlhttprequest", "http://abc/adf", "IMAGE", null, false, false);
+    testMatch("abc$xmlhttprequest", "http://abc/adf", "XMLHTTPREQUEST", null, false, true);
+    testMatch("abc$~xmlhttprequest", "http://abc/adf", "XMLHTTPREQUEST", null, false, false);
+    testMatch("abc$object-subrequest", "http://abc/adf", "IMAGE", null, false, false);
+    testMatch("abc$object-subrequest", "http://abc/adf", "OBJECT_SUBREQUEST", null, false, true);
+    testMatch("abc$~object-subrequest", "http://abc/adf", "OBJECT_SUBREQUEST", null, false, false);
+    testMatch("abc$dtd", "http://abc/adf", "IMAGE", null, false, false);
+    testMatch("abc$dtd", "http://abc/adf", "DTD", null, false, true);
+    testMatch("abc$~dtd", "http://abc/adf", "DTD", null, false, false);
+
+    if (compareGeckoVersion("1.9.1b3") >= 0)
     {
-      testMatch("abc$xbl", "http://abc/adf", "IMAGE", null, false, false);
-      testMatch("abc$xbl", "http://abc/adf", "XBL", null, false, true);
-      testMatch("abc$~xbl", "http://abc/adf", "XBL", null, false, false);
-      testMatch("abc$ping", "http://abc/adf", "IMAGE", null, false, false);
-      testMatch("abc$ping", "http://abc/adf", "PING", null, false, true);
-      testMatch("abc$~ping", "http://abc/adf", "PING", null, false, false);
-      testMatch("abc$xmlhttprequest", "http://abc/adf", "IMAGE", null, false, false);
-      testMatch("abc$xmlhttprequest", "http://abc/adf", "XMLHTTPREQUEST", null, false, true);
-      testMatch("abc$~xmlhttprequest", "http://abc/adf", "XMLHTTPREQUEST", null, false, false);
-      testMatch("abc$object-subrequest", "http://abc/adf", "IMAGE", null, false, false);
-      testMatch("abc$object-subrequest", "http://abc/adf", "OBJECT_SUBREQUEST", null, false, true);
-      testMatch("abc$~object-subrequest", "http://abc/adf", "OBJECT_SUBREQUEST", null, false, false);
-      testMatch("abc$dtd", "http://abc/adf", "IMAGE", null, false, false);
-      testMatch("abc$dtd", "http://abc/adf", "DTD", null, false, true);
-      testMatch("abc$~dtd", "http://abc/adf", "DTD", null, false, false);
+      testMatch("abc$media", "http://abc/adf", "IMAGE", null, false, false);
+      testMatch("abc$media", "http://abc/adf", "MEDIA", null, false, true);
+      testMatch("abc$~media", "http://abc/adf", "MEDIA", null, false, false);
+
+      testMatch("abc$font", "http://abc/adf", "IMAGE", null, false, false);
+      testMatch("abc$font", "http://abc/adf", "FONT", null, false, true);
+      testMatch("abc$~font", "http://abc/adf", "FONT", null, false, false);
     }
+
     testMatch("abc$image,script", "http://abc/adf", "IMAGE", null, false, true);
     testMatch("abc$~image", "http://abc/adf", "IMAGE", null, false, false);
     testMatch("abc$~script", "http://abc/adf", "IMAGE", null, false, true);
@@ -155,7 +195,7 @@
     testMatch("abc$domain=foo.com", "http://abc/def", "IMAGE", "Foo.com", true, true);
     testMatch("abc$domain=foo.com", "http://abc/def", "IMAGE", "abc.def.foo.com", true, true);
     testMatch("abc$domain=foo.com", "http://abc/def", "IMAGE", "www.baz.com", true, false);
-    testMatch("abc$domain=foo.com", "http://abc/def", "IMAGE", null, true, true);
+    testMatch("abc$domain=foo.com", "http://abc/def", "IMAGE", null, true, false);
     testMatch("abc$domain=foo.com|bar.com", "http://abc/def", "IMAGE", "foo.com", true, true);
     testMatch("abc$domain=foo.com|bar.com", "http://abc/def", "IMAGE", "foo.com.", true, true);
     testMatch("abc$domain=foo.com|bar.com", "http://abc/def", "IMAGE", "www.foo.com", true, true);
@@ -163,7 +203,7 @@
     testMatch("abc$domain=foo.com|bar.com", "http://abc/def", "IMAGE", "Foo.com", true, true);
     testMatch("abc$domain=foo.com|bar.com", "http://abc/def", "IMAGE", "abc.def.foo.com", true, true);
     testMatch("abc$domain=foo.com|bar.com", "http://abc/def", "IMAGE", "www.baz.com", true, false);
-    testMatch("abc$domain=foo.com|bar.com", "http://abc/def", "IMAGE", null, true, true);
+    testMatch("abc$domain=foo.com|bar.com", "http://abc/def", "IMAGE", null, true, false);
     testMatch("abc$domain=bar.com|foo.com", "http://abc/def", "IMAGE", "foo.com", true, true);
     testMatch("abc$domain=bar.com|foo.com", "http://abc/def", "IMAGE", "foo.com.", true, true);
     testMatch("abc$domain=bar.com|foo.com", "http://abc/def", "IMAGE", "www.foo.com", true, true);
@@ -171,7 +211,7 @@
     testMatch("abc$domain=bar.com|foo.com", "http://abc/def", "IMAGE", "Foo.com", true, true);
     testMatch("abc$domain=bar.com|foo.com", "http://abc/def", "IMAGE", "abc.def.foo.com", true, true);
     testMatch("abc$domain=bar.com|foo.com", "http://abc/def", "IMAGE", "www.baz.com", true, false);
-    testMatch("abc$domain=bar.com|foo.com", "http://abc/def", "IMAGE", null, true, true);
+    testMatch("abc$domain=bar.com|foo.com", "http://abc/def", "IMAGE", null, true, false);
     testMatch("abc$domain=~foo.com", "http://abc/def", "IMAGE", "foo.com", true, false);
     testMatch("abc$domain=~foo.com", "http://abc/def", "IMAGE", "foo.com.", true, false);
     testMatch("abc$domain=~foo.com", "http://abc/def", "IMAGE", "www.foo.com", true, false);

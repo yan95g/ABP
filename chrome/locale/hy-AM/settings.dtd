@@ -71,6 +71,8 @@
 ">
 <!ENTITY filter.column "Ֆիլտր">
 <!ENTITY filter.accesskey "լ">
+<!ENTITY slow.column "Դանդաղ ֆիլտրեր">
+<!ENTITY slow.accesskey "w">
 <!ENTITY enabled.column "Միացած է">
 <!ENTITY enabled.accesskey "Մ">
 <!ENTITY hitcount.column "Ազդ">

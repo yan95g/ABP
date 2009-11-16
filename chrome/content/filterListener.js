@@ -15,7 +15,7 @@
  *
  * The Initial Developer of the Original Code is
  * Wladimir Palant.
- * Portions created by the Initial Developer are Copyright (C) 2006-2008
+ * Portions created by the Initial Developer are Copyright (C) 2006-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -24,7 +24,7 @@
 
 /*
  * Component synchronizing filter storage with Matcher instances and elemhide.
- * This file is included from nsAdblockPlus.js.
+ * This file is included from AdblockPlus.js.
  */
 
 /**
@@ -35,6 +35,22 @@
 var filterListener =
 {
   subscriptionFilter: null,
+
+  _batchMode: false,
+  /**
+   * Set to true when executing many changes, changes will only be fully applied after this variable is set to false again.
+   * @type Boolean
+   */
+  get batchMode()
+  {
+    return this._batchMode;
+  },
+  set batchMode(value)
+  {
+    this._batchMode = value;
+    if (!this._batchMode && elemhide.isDirty)
+      elemhide.apply();
+  },
 
   /**
    * Registers listeners for filterStorage changes
@@ -142,7 +158,7 @@ var filterListener =
           subscription.filters.forEach(this.addFilter, this);
     }
 
-    if (elemhide.isDirty)
+    if (!this._batchMode && elemhide.isDirty)
       elemhide.apply();
   },
 
@@ -170,10 +186,9 @@ var filterListener =
         });
       }
       filters.forEach(method, this);
-      if (elemhide.isDirty)
+      if (!this._batchMode && elemhide.isDirty)
         elemhide.apply();
     }
   }
 };
-
-filterListener.init();
+abp.filterListener = filterListener;

@@ -6,7 +6,7 @@
 <!ENTITY addsubscription.label "إضافة اشتراك إلى فلتر">
 <!ENTITY addsubscription.accesskey "ش">
 <!ENTITY synchsubscriptions.label "تحديث كل الاشتراكات">
-<!ENTITY synchsubscriptions.accesskey "د">
+<!ENTITY synchsubscriptions.accesskey "ث">
 <!ENTITY import.label "استيراد فلاتر">
 <!ENTITY import.accesskey "س">
 <!ENTITY export.label "تصدير فلاتر">
@@ -53,12 +53,12 @@
 <!ENTITY collapse.accesskey "ط">
 <!ENTITY help.label "مساعدة">
 <!ENTITY help.accesskey "م">
+<!ENTITY gettingStarted.label "ابدأ هنا">
+<!ENTITY gettingStarted.accesskey "د">
+<!ENTITY gettingStarted.url "http://adblockplus.org/en/getting_started">
 <!ENTITY faq.label "الأسئلة الشائعة">
 <!ENTITY faq.accesskey "س">
 <!ENTITY faq.url "http://adblockplus.org/en/faq">
-<!ENTITY tips.label "تلميح اليوم">
-<!ENTITY tips.accesskey "ح">
-<!ENTITY tips.url "http://adblockplus.org/en/tips">
 <!ENTITY filterdoc.label "كتابة فلاتر لآدبلوك بلاس">
 <!ENTITY filterdoc.accesskey "ك">
 <!ENTITY filterdoc.url "http://adblockplus.org/en/filters">
@@ -68,6 +68,8 @@
 يمكنك أن تستعمل الرمز * لإنشاء فلاتر عامة. المستخدمين المتقدمين يمكنهم استخدام بعض التعبيرات النظامية مثل /banner\d+\.gif$/">
 <!ENTITY filter.column "قانون الفلتر">
 <!ENTITY filter.accesskey "ف">
+<!ENTITY slow.column "عرض الفلاتر">
+<!ENTITY slow.accesskey "ع">
 <!ENTITY enabled.column "مشغل">
 <!ENTITY enabled.accesskey "غ">
 <!ENTITY hitcount.column "الضغطات">

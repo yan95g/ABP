@@ -8,14 +8,15 @@
 <!ENTITY filter.label "Filter">
 <!ENTITY state.label "Status">
 <!ENTITY size.label "Grootte">
+<!ENTITY docDomain.label "Bronpagina">
 <!ENTITY noitems.label "Geen blokkeerbare onderdelen">
 <!ENTITY whitelisted.label "Toegestane pagina">
-<!ENTITY notloaded.label "Adblock Plus is niet goed geïnstalleerd">
 <!ENTITY tooltip.address.label "Adres:">
 <!ENTITY tooltip.type.label "Type:">
 <!ENTITY tooltip.type.blocked "(geblokkeerd)">
 <!ENTITY tooltip.type.whitelisted "(toegestaan)">
 <!ENTITY tooltip.size.label "Grootte">
+<!ENTITY tooltip.docDomain.label "Bronbagina:">
 <!ENTITY tooltip.filter.label "Toegepast filter:">
 <!ENTITY tooltip.filterSource.label "Filter bron:">
 <!ENTITY context.block.label "Blokkeer dit onderdeel">
@@ -23,6 +24,7 @@
 <!ENTITY context.whitelist.label "Voeg een uitzonderingsregel voor dit onderdeel toe">
 <!ENTITY context.disablefilter.label "Filter uitschakelen --">
 <!ENTITY context.enablefilter.label "Filter inschakelen --">
+<!ENTITY context.disablefilteronsite.label "Filter uitschakelen op __">
 <!ENTITY context.open.label "Open in een nieuw tabblad">
 <!ENTITY context.flash.label "Laat randen knipperen">
 <!ENTITY context.copy.label "Adres kopiëren">

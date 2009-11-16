@@ -5,6 +5,9 @@
 <!ENTITY disabled.warning.beforeLink "Adblock Plus가 현재 중지 중입니다. 필터는 추가할 수 있지만 적용되지는 않습니다.">
 <!ENTITY disabled.warning.link "Adblock Plus 사용">
 <!ENTITY disabled.warning.afterLink ".">
+<!ENTITY groupDisabled.warning.beforeLink "추가될 필터 그룹 &quot;&#x25;S&quot;은(는) 현재 사용 해제 상태입니다. 필터를 더 추가할 수 있지만 자동으로 적용되지는 않습니다.">
+<!ENTITY groupDisabled.warning.link "필터 그룹 사용">
+<!ENTITY groupDisabled.warning.afterLink ".">
 <!ENTITY filter.label "새 필터:">
 <!ENTITY filter.accesskey "f">
 <!ENTITY preferences.label "저장된 필터 보기...">
@@ -22,9 +25,14 @@
 <!ENTITY anchors.label "허용 패턴:">
 <!ENTITY anchor.start.label "주소 시작 부분">
 <!ENTITY anchor.start.accesskey "g">
+<!ENTITY anchor.start.flexible.label "도메인명 시작지점">
+<!ENTITY anchor.start.flexible.accesskey "g">
 <!ENTITY anchor.end.label "주소 끝 부분">
-<!ENTITY anchor.end.accesskey "d">
+<!ENTITY anchor.end.accesskey "n">
 <!ENTITY options.label "옵션">
+<!ENTITY domainRestriction.label "도메인 제한:">
+<!ENTITY domainRestriction.accesskey "d">
+<!ENTITY domainRestriction.help "한 개 또는 &quot;|&quot; 기호를 이용하여 여러 도메인을 지정하면, 필터는 지정된 도메인에 대해서만 적용됩니다. 도메인명 앞에 &quot;~&quot; 기호는 필터 적용에서 제외됩니다.">
 <!ENTITY firstParty.label "First-party 만">
 <!ENTITY firstParty.accesskey "r">
 <!ENTITY thirdParty.label "Third-party 만">
@@ -32,6 +40,8 @@
 <!ENTITY matchCase.label "대/소문자 구별">
 <!ENTITY matchCase.accesskey "M">
 <!ENTITY types.label "적용 형식:">
+<!ENTITY selectAllTypes.label "모두 선택">
+<!ENTITY unselectAllTypes.label "모든 선택 취소">
 <!ENTITY collapse.label "차단 항목 숨김:">
 <!ENTITY collapse.accesskey "l">
 <!ENTITY collapse.default.yes.label "기본값 적용(예)">

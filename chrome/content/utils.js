@@ -15,7 +15,7 @@
  *
  * The Initial Developer of the Original Code is
  * Wladimir Palant.
- * Portions created by the Initial Developer are Copyright (C) 2006-2008
+ * Portions created by the Initial Developer are Copyright (C) 2006-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -24,12 +24,13 @@
 
 /*
  * Utility functions and classes.
- * This file is included from nsAdblockPlus.js.
+ * This file is included from AdblockPlus.js.
  */
 
+var threadManager = Cc["@mozilla.org/thread-manager;1"].getService(Ci.nsIThreadManager);
+
 // String service
-var stringService = Components.classes["@mozilla.org/intl/stringbundle;1"]
-                              .getService(Components.interfaces.nsIStringBundleService);
+var stringService = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService);
 var strings = stringService.createBundle("chrome://adblockplus/locale/global.properties");
 abp.getString = function(name) {
   return strings.GetStringFromName(name);
@@ -48,7 +49,7 @@ function getWindow(node) {
 
 // Unwraps jar:, view-source: and wyciwyg: URLs, returns the contained URL
 function unwrapURL(url) {
-  if (!(url instanceof Components.interfaces.nsIURI))
+  if (!(url instanceof Ci.nsIURI))
     url = makeURL(url);
 
   try
@@ -60,9 +61,12 @@ function unwrapURL(url) {
       case "wyciwyg":
         return unwrapURL(url.path.replace(/^\/\/\d+\//, ""));
       case "jar":
-        return unwrapURL(url.QueryInterface(Components.interfaces.nsIJARURI).JARFile);
+        return unwrapURL(url.QueryInterface(Ci.nsIJARURI).JARFile);
       default:
-        return url;
+        if (url instanceof Ci.nsIURL && url.ref)
+          return makeURL(url.spec.replace(/#.*/, ""));
+        else
+          return url;
     }
   }
   catch (e) { return url; }
@@ -81,65 +85,23 @@ function makeURL(url) {
 }
 abp.makeURL = makeURL;
 
-// hides a blocked element and collapses it if necessary
-function postProcessNode(node) {
-  if (!(node instanceof Element))
-    return;
-
-  // adjust frameset's cols/rows for frames
-  var parentNode = node.parentNode;
-  if (parentNode && parentNode instanceof Components.interfaces.nsIDOMHTMLFrameSetElement)
-  {
-    let hasCols = (parentNode.cols && parentNode.cols.indexOf(",") > 0);
-    let hasRows = (parentNode.rows && parentNode.rows.indexOf(",") > 0);
-    if ((hasCols || hasRows) && !(hasCols && hasRows))
-    {
-      var index = -1;
-      for (var frame = node; frame; frame = frame.previousSibling)
-        if (frame instanceof Components.interfaces.nsIDOMHTMLFrameElement || frame instanceof Components.interfaces.nsIDOMHTMLFrameSetElement)
-          index++;
-  
-      var property = (hasCols ? "cols" : "rows");
-      var weights = parentNode[property].split(",");
-      weights[index] = "0";
-      parentNode[property] = weights.join(",");
-    }
-  }
-  else
-    node.style.display = "none";
-}
-
 // Generates a click handler for object tabs
 function generateClickHandler(wnd, data) {
   return function(event) {
     event.preventDefault();
-    wnd.openDialog("chrome://adblockplus/content/composer.xul", "_blank", "chrome,centerscreen,resizable,dialog=no,dependent", wnd, data); 
+    wnd.openDialog("chrome://adblockplus/content/ui/composer.xul", "_blank", "chrome,centerscreen,resizable,dialog=no,dependent", wnd, data); 
   }
 }
 
-var objTabBinding = null;
-
 // Creates a tab above/below the new object node
-function addObjectTab(wnd, node, data, tab) {
-  var origNode = node;
-
-  if (node.parentNode && node.parentNode.tagName.toLowerCase() == "object") {
-    // Don't insert object tabs inside an outer object, causes ActiveX Plugin to do bad things
-    node = node.parentNode;
-  }
-
-  if (!node.parentNode || !node.offsetWidth || !node.offsetHeight)
+function addObjectTab(wnd, node, data, tab)
+{
+  if (!node.parentNode)
     return;
-
-  // Decide whether to display the tab on top or the bottom of the object
-  var offsetTop = 0;
-  for (var offsetNode = origNode; offsetNode; offsetNode = offsetNode.offsetParent)
-    offsetTop += offsetNode.offsetTop;
-
-  var onTop = (offsetTop > 40);
 
   // Click event handler
   tab.setAttribute("href", data.location);
+  tab.setAttribute("class", policy.objtabClass);
   tab.addEventListener("click", generateClickHandler(wnd, data), false);
 
   // Insert tab into the document
@@ -147,62 +109,51 @@ function addObjectTab(wnd, node, data, tab) {
     node.parentNode.insertBefore(tab, node.nextSibling);
   else
     node.parentNode.appendChild(tab);
-
-  // Attach binding
-  var doc = node.ownerDocument;
-  doc.loadBindingDocument("chrome://adblockplus/content/objecttab.xml");
-  doc.addBinding(tab, "chrome://adblockplus/content/objecttab.xml#objectTab");
-
-  var initHandler = function() {
-    // Make binding apply properly
-    tab.className = gObjtabClass;
-
-    createTimer(initHandler2, 0);
-  }
-  var initHandler2 = function() {
-    // Initialization
-    var label = doc.getAnonymousNodes(tab)[0];
-
-    // Tooltip
-    tab.setAttribute("title", label.getAttribute("title"));
-
-    // Tab dimensions
-    var tabWidth = label.offsetWidth;
-    var tabHeight = label.offsetHeight;
-
-    // Label positioning
-    label.style.setProperty("left", -tabWidth + "px", "important");
-    label.style.setProperty("top", onTop ? -tabHeight + "px" :  "0px", "important");
-
-    // Tab positioning
-    if ("getBoundingClientRect" in origNode)
-    {
-      let nodeRect = origNode.getBoundingClientRect();
-      let tabRect = tab.getBoundingClientRect();
-      tab.style.setProperty("left", (nodeRect.right - tabRect.left) + "px", "important");
-      tab.style.setProperty("top", ((onTop ? nodeRect.top : nodeRect.bottom) - tabRect.top) + "px", "important");
-    }
-    else
-    {
-      // Firefox 2 fallback code
-      let box1 = doc.getBoxObjectFor(origNode);
-      let box2 = doc.getBoxObjectFor(tab);
-      tab.style.setProperty("left", (box1.screenX + box1.width - box2.screenX) + "px", "important");
-      tab.style.setProperty("top", (box1.screenY + (onTop ? 0 : box1.height) - box2.screenY) + "px", "important");
-    }
-
-    // Show tab
-    tab.className = gObjtabClass + " visible" + (onTop ? " ontop" : "");
-  }
-  createTimer(initHandler, 0);
 }
 
-// Sets a timeout, comparable to the usual setTimeout function
-function createTimer(callback, delay) {
-  var timer = Components.classes["@mozilla.org/timer;1"];
-  timer = timer.createInstance(Components.interfaces.nsITimer);
-  timer.init({observe: callback}, delay, timer.TYPE_ONE_SHOT);
-  return timer;
+/**
+ * Posts an action to the event queue of the current thread to run it
+ * asynchronously. Any additional parameters to this function are passed
+ * as parameters to the callback.
+ */
+function runAsync(/**Function*/ callback, /**Object*/ thisPtr)
+{
+  let params = Array.prototype.slice.call(arguments, 2);
+  let runnable = {
+    run: function()
+    {
+      callback.apply(thisPtr, params);
+    }
+  };
+  threadManager.currentThread.dispatch(runnable, Ci.nsIEventTarget.DISPATCH_NORMAL);
+}
+abp.runAsync = runAsync;
+
+/**
+ * Gets the DOM window associated with a particular request (if any).
+ */
+function getRequestWindow(/**nsIChannel*/ channel) /**nsIDOMWindow*/
+{
+  let callbacks = [];
+  if (channel.notificationCallbacks)
+    callbacks.push(channel.notificationCallbacks);
+  if (channel.loadGroup && channel.loadGroup.notificationCallbacks)
+    callbacks.push(channel.loadGroup.notificationCallbacks);
+
+  for each (let callback in callbacks)
+  {
+    try {
+      // For Gecko 1.9.1
+      return callback.getInterface(Ci.nsILoadContext).associatedWindow;
+    } catch(e) {}
+
+    try {
+      // For Gecko 1.9.0
+      return callback.getInterface(Ci.nsIDOMWindow);
+    } catch(e) {}
+  }
+
+  return null;
 }
 
 // Returns plattform dependent line break string
@@ -213,15 +164,12 @@ function getLineBreak() {
     // plattform's line breaks by reading prefs.js
     lineBreak = "\n";
     try {
-      var dirService = Components.classes["@mozilla.org/file/directory_service;1"]
-                                  .createInstance(Components.interfaces.nsIProperties);
-      var prefFile = dirService.get("PrefF", Components.interfaces.nsIFile);
-      var inputStream = Components.classes["@mozilla.org/network/file-input-stream;1"]
-                                  .createInstance(Components.interfaces.nsIFileInputStream);
+      var dirService = Cc["@mozilla.org/file/directory_service;1"].createInstance(Ci.nsIProperties);
+      var prefFile = dirService.get("PrefF", Ci.nsIFile);
+      var inputStream = Cc["@mozilla.org/network/file-input-stream;1"].createInstance(Ci.nsIFileInputStream);
       inputStream.init(prefFile, 0x01, 0444, 0);
 
-      var scriptableStream = Components.classes["@mozilla.org/scriptableinputstream;1"]
-                                        .createInstance(Components.interfaces.nsIScriptableInputStream);
+      var scriptableStream = Cc["@mozilla.org/scriptableinputstream;1"].createInstance(Ci.nsIScriptableInputStream);
       scriptableStream.init(inputStream);
       var data = scriptableStream.read(1024);
       scriptableStream.close();
@@ -273,13 +221,11 @@ function generateChecksum(lines)
     // Checksum is an MD5 checksum (base64-encoded without the trailing "=") of
     // all lines in UTF-8 without the checksum line, joined with "\n".
 
-    let converter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
-                              .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+    let converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Ci.nsIScriptableUnicodeConverter);
     converter.charset = "UTF-8";
     stream = converter.convertToInputStream(lines.join("\n"));
 
-    let hashEngine = Components.classes["@mozilla.org/security/hash;1"]
-                               .createInstance(Components.interfaces.nsICryptoHash);
+    let hashEngine = Cc["@mozilla.org/security/hash;1"].createInstance(Ci.nsICryptoHash);
     hashEngine.init(hashEngine.MD5);
     hashEngine.updateFromStream(stream, stream.available());
     return hashEngine.finish(true).replace(/=+$/, "");
@@ -295,3 +241,20 @@ function generateChecksum(lines)
   }
 }
 abp.generateChecksum = generateChecksum;
+
+let _wrapNodeArray = null;
+
+/**
+ * Forces XPCNativeWrapper on a DOM element. This is used only in tests.
+ */
+function wrapNode(node)
+{
+  if (!_wrapNodeArray)
+    _wrapNodeArray = Cc["@mozilla.org/array;1"].createInstance(Ci.nsIMutableArray);
+
+  _wrapNodeArray.appendElement(node, false);
+  let result = _wrapNodeArray.queryElementAt(0, Ci.nsISupports);
+  _wrapNodeArray.removeElementAt(0);
+  return result;
+}
+abp.wrapNode = wrapNode;

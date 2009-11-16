@@ -67,6 +67,8 @@
 <!ENTITY description "I filtri presenti nel riquadro qui sotto determinano gli indirizzi web da permettere oppure da bloccare">
 <!ENTITY filter.column "Ruolo del filtro">
 <!ENTITY filter.accesskey "f">
+<!ENTITY slow.column "Filtri lenti">
+<!ENTITY slow.accesskey "l">
 <!ENTITY enabled.column "Attivato">
 <!ENTITY enabled.accesskey "t">
 <!ENTITY hitcount.column "Accessi">

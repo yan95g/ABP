@@ -15,7 +15,7 @@
  *
  * The Initial Developer of the Original Code is
  * Wladimir Palant.
- * Portions created by the Initial Developer are Copyright (C) 2006-2008
+ * Portions created by the Initial Developer are Copyright (C) 2006-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -24,7 +24,7 @@
 
 /*
  * Matcher class implementing matching addresses against a list of filters.
- * This file is included from nsAdblockPlus.js.
+ * This file is included from AdblockPlus.js.
  */
 
 /**
@@ -162,7 +162,9 @@ Matcher.prototype = {
     if (Filter.regexpRegExp.test(text))
       return null;
 
-    text = text.replace(Filter.optionsRegExp, "").replace(/^@@/, "").replace(/^\|/, "").replace(/\|$/, "").toLowerCase();
+    text = text.replace(Filter.optionsRegExp, "").replace(/^@@/, "")
+               .replace(/^\|{1,2}/, "").replace(/\|$/, "")
+               .replace(/\^/g, "*").toLowerCase();
 
     let len = Matcher.shortcutLength;
     let numCandidates = text.length - len + 1;

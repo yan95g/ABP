@@ -3,9 +3,9 @@
 <!ENTITY filters.accesskey "Ф">
 <!ENTITY add.label "Додај филтер">
 <!ENTITY add.accesskey "а">
-<!ENTITY addsubscription.label "Додај пријаву на филтер">
+<!ENTITY addsubscription.label "Додај претплату на филтер">
 <!ENTITY addsubscription.accesskey "л">
-<!ENTITY synchsubscriptions.label "Ажурирај све пријаве">
+<!ENTITY synchsubscriptions.label "Ажурирај све претплате">
 <!ENTITY synchsubscriptions.accesskey "ј">
 <!ENTITY import.label "Увези филтере">
 <!ENTITY import.accesskey "з">
@@ -53,12 +53,12 @@
 <!ENTITY collapse.accesskey "б">
 <!ENTITY help.label "Помоћ">
 <!ENTITY help.accesskey "П">
+<!ENTITY gettingStarted.label "Како почети">
+<!ENTITY gettingStarted.accesskey "К">
+<!ENTITY gettingStarted.url "http://adblockplus.org/en/getting_started">
 <!ENTITY faq.label "Најчешће постављана питања">
 <!ENTITY faq.accesskey "Н">
 <!ENTITY faq.url "http://adblockplus.org/en/faq">
-<!ENTITY tips.label "Савет дана">
-<!ENTITY tips.accesskey "т">
-<!ENTITY tips.url "http://adblockplus.org/en/tips">
 <!ENTITY filterdoc.label "Писање филтера за Adblock Plus">
 <!ENTITY filterdoc.accesskey "P">
 <!ENTITY filterdoc.url "http://adblockplus.org/en/filters">
@@ -67,6 +67,8 @@
 <!ENTITY description "Следећи филтери одређују које ће адресе бити блокиране, а које дозвољене:">
 <!ENTITY filter.column "Правило филтера">
 <!ENTITY filter.accesskey "ф">
+<!ENTITY slow.column "Спори филтери">
+<!ENTITY slow.accesskey "п">
 <!ENTITY enabled.column "Укључен">
 <!ENTITY enabled.accesskey "н">
 <!ENTITY hitcount.column "Број погодака">

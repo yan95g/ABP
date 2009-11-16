@@ -15,7 +15,7 @@
  *
  * The Initial Developer of the Original Code is
  * Wladimir Palant.
- * Portions created by the Initial Developer are Copyright (C) 2006-2008
+ * Portions created by the Initial Developer are Copyright (C) 2006-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -24,23 +24,15 @@
 
 /*
  * Manages Adblock Plus preferences.
- * This file is included from nsAdblockPlus.js.
+ * This file is included from AdblockPlus.js.
  */
 
 const prefRoot = "extensions.adblockplus.";
 
-var gObjtabClass = ""
-for (let i = 0; i < 20; i++)
-  gObjtabClass += String.fromCharCode("a".charCodeAt(0) + Math.random() * 26);
-
-var prefService = Components.classes["@mozilla.org/preferences-service;1"]
-                            .getService(Components.interfaces.nsIPrefService);
-
-var ScriptableInputStream = Components.Constructor("@mozilla.org/scriptableinputstream;1", "nsIScriptableInputStream", "init");
+var prefService = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService);
 
 var prefs = {
   lastVersion: null,
-  initialized: false,
   disableObserver: false,
   privateBrowsing: false,
   branch: prefService.getBranch(prefRoot),
@@ -50,33 +42,21 @@ var prefs = {
   addObservers: function() {
     // Observe preferences changes
     try {
-      var branchInternal = this.branch.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+      var branchInternal = this.branch.QueryInterface(Ci.nsIPrefBranchInternal);
       branchInternal.addObserver("", this, true);
     }
     catch (e) {
       dump("Adblock Plus: exception registering pref observer: " + e + "\n");
     }
 
-    var observerService = Components.classes["@mozilla.org/observer-service;1"]
-                                    .getService(Components.interfaces.nsIObserverService);
-
-    // Observe profile changes
-    try {
-      observerService.addObserver(this, "profile-before-change", true);
-      observerService.addObserver(this, "profile-after-change", true);
-    }
-    catch (e) {
-      dump("Adblock Plus: exception registering profile observer: " + e + "\n");
-    }
-
     // Add Private Browsing observer
-    if ("@mozilla.org/privatebrowsing;1" in Components.classes)
+    if ("@mozilla.org/privatebrowsing;1" in Cc)
     {
       try
       {
-        this.privateBrowsing = Components.classes["@mozilla.org/privatebrowsing;1"]
-                                         .getService(Components.interfaces.nsIPrivateBrowsingService)
-                                         .privateBrowsingEnabled;
+        this.privateBrowsing = Cc["@mozilla.org/privatebrowsing;1"].getService(Ci.nsIPrivateBrowsingService).privateBrowsingEnabled;
+
+        var observerService = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
         observerService.addObserver(this, "private-browsing", true);
       }
       catch(e)
@@ -84,57 +64,10 @@ var prefs = {
         dump("Adblock Plus: exception initializing private browsing observer: " + e + "\n");
       }
     }
-
-    // Delay initialization if profile isn't available yet (SeaMonkey)
-    var doInit = true;
-    if ("@mozilla.org/profile/manager;1" in Components.classes) {
-      try {
-        // Need to catch errors here because of kprofile.dll (Pocket K-Meleon)
-        var profileManager = Components.classes["@mozilla.org/profile/manager;1"]
-                                      .getService(Components.interfaces.nsIProfileInternal);
-        doInit = profileManager.isCurrentProfileAvailable();
-      } catch(e) {}
-    }
-    if (doInit)
-      this.observe(null, "profile-after-change", null);
   },
 
-  init: function() {
-    try {
-      // Initialize object tabs CSS
-      var channel = ioService.newChannel("chrome://adblockplus/content/objtabs.css", null, null);
-      channel.asyncOpen({
-        data: "",
-        onDataAvailable: function(request, context, stream, offset, count) {
-          stream = ScriptableInputStream(stream);
-          this.data += stream.read(count);
-        },
-        onStartRequest: function() {},
-        onStopRequest: function() {
-          var data = this.data.replace(/%%CLASSNAME%%/g, gObjtabClass);
-          var objtabsCSS = makeURL("data:text/css," + encodeURIComponent(data));
-          Components.classes["@mozilla.org/content/style-sheet-service;1"]
-                    .getService(Components.interfaces.nsIStyleSheetService)
-                    .loadAndRegisterSheet(objtabsCSS, styleService.USER_SHEET);
-          channel = null;
-        },
-        QueryInterface: function(iid) {
-          if (iid.equals(Components.interfaces.nsISupports) ||
-              iid.equals(Components.interfaces.nsIRequestObserver) ||
-              iid.equals(Components.interfaces.nsIStreamListener))
-            return this;
-
-          throw Components.results.NS_ERROR_NO_INTERFACE;
-        }
-      }, null);
-    }
-    catch (e) {}
-
-    // Try to fix selected locale in Mozilla/SeaMonkey
-    strings = stringService.createBundle("chrome://adblockplus/locale/global.properties");
-    fixPackageLocale();
-    strings = stringService.createBundle("chrome://adblockplus/locale/global.properties");
-
+  init: function()
+  {
     // Initialize prefs list
     var defaultBranch = prefService.getDefaultBranch(prefRoot);
     var defaultPrefs = defaultBranch.getChildList("", {});
@@ -165,8 +98,8 @@ var prefs = {
       this.save();
     }
 
-    filterStorage.loadFromDisk();
-    policy.init();
+    // Add observers for pref changes
+    prefs.addObservers();
   },
 
   // Loads a pref and stores it as a property of the object
@@ -191,8 +124,8 @@ var prefs = {
   // Reloads the preferences
   reload: function() {
     // Load data from prefs.js
-    for each (var pref in this.prefList)
-      this.loadPref(pref);
+    for (let i = 0; i < this.prefList.length; i++)
+      this.loadPref(this.prefList[i]);
 
     elemhide.apply();
 
@@ -205,8 +138,8 @@ var prefs = {
   save: function() {
     this.disableObserver = true;
   
-    for each (var pref in this.prefList)
-      this.savePref(pref);
+    for (let i = 0; i < this.prefList.length; i++)
+      this.savePref(this.prefList[i]);
 
     this.disableObserver = false;
 
@@ -231,35 +164,19 @@ var prefs = {
 
   // nsIObserver implementation
   observe: function(subject, topic, prefName) {
-    if (topic == "profile-after-change") {
-      this.init();
-      this.initialized = true;
-    }
-    else if (this.initialized && topic == "profile-before-change") {
-      filterStorage.saveToDisk();
-      this.initialized = false;
-    }
-    else if (topic == "private-browsing")
+    if (topic == "private-browsing")
     {
       if (prefName == "enter")
         this.privateBrowsing = true;
       else if (prefName == "exit")
         this.privateBrowsing = false;
     }
-    else if (this.initialized && !this.disableObserver)
+    else if (!this.disableObserver)
       this.reload();
   },
 
   // nsISupports implementation
-  QueryInterface: function(iid) {
-    if (!iid.equals(Components.interfaces.nsISupports) &&
-        !iid.equals(Components.interfaces.nsISupportsWeakReference) &&
-        !iid.equals(Components.interfaces.nsIObserver))
-      throw Components.results.NS_ERROR_NO_INTERFACE;
-
-    return this;
-  }
+  QueryInterface: XPCOMUtils.generateQI([Ci.nsISupportsWeakReference, Ci.nsIObserver])
 };
 
-prefs.addObservers();
 abp.prefs = prefs;

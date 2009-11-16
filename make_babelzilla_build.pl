@@ -7,8 +7,10 @@
 
 use strict;
 use warnings;
-use lib qw(. ..);
+use lib qw(buildtools);
 use Packager;
+
+sub Packager::fixLocales() {}
 
 my $manifest = readFile("chrome.manifest");
 unless ($manifest =~ /\bjar:chrome\/(\S+?)\.jar\b/)
@@ -27,10 +29,10 @@ my $pkg = Packager->new(\%params);
 $pkg->readLocales('chrome/locale', 1);
 
 chdir('chrome');
-$pkg->makeJAR("$baseName.jar", 'content', 'skin', 'locale', '-/tests', '-/mochitest', '-/.incomplete', '-/contents.rdf');
+$pkg->makeJAR("$baseName.jar", 'content', 'skin', 'locale', '-/tests', '-/mochitest', '-/.incomplete');
 chdir('..');
 
-my @files = grep {-e $_} ('components', 'defaults', 'install.js', 'install.rdf', 'chrome.manifest');
+my @files = grep {-e $_} ('components', 'defaults', 'install.rdf', 'chrome.manifest', 'icon.png');
 
 my $targetAppNum = 0;
 $pkg->{postprocess_line} = \&postprocessInstallRDF;

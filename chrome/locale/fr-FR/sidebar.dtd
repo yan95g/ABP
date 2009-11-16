@@ -8,14 +8,15 @@
 <!ENTITY filter.label "Filtre">
 <!ENTITY state.label "État">
 <!ENTITY size.label "Taille">
+<!ENTITY docDomain.label "Source du document">
 <!ENTITY noitems.label "Aucun élément filtrable">
 <!ENTITY whitelisted.label "Page dans la liste blanche">
-<!ENTITY notloaded.label "Adblock Plus ne semble pas avoir été installée correctement">
 <!ENTITY tooltip.address.label "Adresse :">
 <!ENTITY tooltip.type.label "Type :">
 <!ENTITY tooltip.type.blocked "(bloqué)">
 <!ENTITY tooltip.type.whitelisted "(autorisé)">
 <!ENTITY tooltip.size.label "Taille :">
+<!ENTITY tooltip.docDomain.label "Source du document :">
 <!ENTITY tooltip.filter.label "Filtre utilisé :">
 <!ENTITY tooltip.filterSource.label "Source du filtre :">
 <!ENTITY context.block.label "Bloquer cet élément">
@@ -24,7 +25,6 @@
 <!ENTITY context.disablefilter.label "Désactiver le filtre --">
 <!ENTITY context.enablefilter.label "Réactiver le filtre --">
 <!ENTITY context.disablefilteronsite.label "Désactiver ce filtre pour --">
-<!ENTITY context.enablefilteronsite.label "Réactiver ce filtre pour --">
 <!ENTITY context.open.label "Ouvrir dans un nouvel onglet">
 <!ENTITY context.flash.label "Faire clignoter les bordures de l&apos;élément">
 <!ENTITY context.copy.label "Copier l&apos;adresse de l&apos;élément">

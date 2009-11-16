@@ -15,7 +15,7 @@
  *
  * The Initial Developer of the Original Code is
  * Wladimir Palant.
- * Portions created by the Initial Developer are Copyright (C) 2006-2008
+ * Portions created by the Initial Developer are Copyright (C) 2006-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -24,11 +24,10 @@
 
 /*
  * Element hiding implementation.
- * This file is included from nsAdblockPlus.js.
+ * This file is included from AdblockPlus.js.
  */
 
-var styleService = Components.classes["@mozilla.org/content/style-sheet-service;1"]
-                             .getService(Components.interfaces.nsIStyleSheetService); 
+var styleService = Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService); 
 
 /**
  * Element hiding component
@@ -36,6 +35,11 @@ var styleService = Components.classes["@mozilla.org/content/style-sheet-service;
  */
 var elemhide =
 {
+  /**
+   * Class ID for the protocol handler.
+   */
+  protoCID: Components.ID("{e3823970-1546-11de-8c30-0800200c9a66}"),
+
   /**
    * List of known filters
    * @type Array of ElemHideFilter
@@ -67,9 +71,22 @@ var elemhide =
   isDirty: false,
 
   /**
+   * Initialization function, should be called after policy initialization.
+   */
+  init: function()
+  {
+    try {
+      let compMgr = Components.manager.QueryInterface(Ci.nsIComponentRegistrar);
+      compMgr.registerFactory(this.protoCID, "Element hiding hit registration protocol handler", "@mozilla.org/network/protocol;1?name=" + this.scheme, this);
+      policy.whitelistSchemes[this.scheme] = true;
+    } catch (e) {}
+  },
+
+  /**
    * Removes all known filters
    */
-  clear: function() {
+  clear: function()
+  {
     this.filters = [];
     this.knownFilters= {__proto__: null};
     this.keys = {__proto__: null};
@@ -118,18 +135,30 @@ var elemhide =
   /**
    * Generates stylesheet URL and applies it globally
    */
-  apply: function() {
+  apply: function()
+  {
+    // Return immediately if nothing to do
+    if (!this.url && (!prefs.enabled || !this.filters.length))
+      return;
+
+    timeLine.enter("Entered elemhide.apply()");
     this.unapply();
+    timeLine.log("elemhide.unapply() finished");
+
     this.isDirty = false;
 
     if (!prefs.enabled)
+    {
+      timeLine.leave("elemhide.apply() done (disabled)");
       return;
+    }
 
     // Grouping selectors by domains
+    timeLine.log("start grouping selectors");
     let domains = {__proto__: null};
     for each (var filter in this.filters)
     {
-      let domain = filter.domain || "";
+      let domain = filter.selectorDomain || "";
 
       let list;
       if (domain in domains)
@@ -141,28 +170,19 @@ var elemhide =
       }
       list[filter.selector] = filter.key;
     }
+    timeLine.log("done grouping selectors");
 
     // Joining domains list
+    timeLine.log("start building CSS data");
     let cssData = "";
-    let cssTemplate = "-moz-binding: url(chrome://global/content/bindings/general.xml?abphit:%ID%#basecontrol) !important;"
-
-    let geckoVersion = "0.0";
-    if ("nsIXULAppInfo" in  Components.interfaces)
-        geckoVersion = Components.classes["@mozilla.org/xre/app-info;1"].getService(Components.interfaces.nsIXULAppInfo).platformVersion;
-    if (abp.versionComparator.compare(geckoVersion, "1.9a1") < 0)
-    {
-      // Gecko 1.8 does not apply bindings to table rows and cells, need to
-      // change the value for display here. This might have undesired
-      // side-effects (http://adblockplus.org/forum/viewtopic.php?t=3200).
-      cssTemplate += "display: inline !important;";
-    }
+    let cssTemplate = "-moz-binding: url(" + this.scheme + "://%ID%/#dummy) !important;";
 
     for (let domain in domains)
     {
       let rules = [];
       let list = domains[domain];
       for (let selector in list)
-        rules.push(selector + "{" + cssTemplate.replace(/%ID%/, list[selector]) + "}\n");
+        rules.push(selector + "{" + cssTemplate.replace("%ID%", list[selector]) + "}\n");
 
       if (domain)
         cssData += '@-moz-document domain("' + domain.split(",").join('"),domain("') + '"){\n' + rules.join('') + '}\n';
@@ -175,27 +195,144 @@ var elemhide =
                   + '}\n';
       }
     }
+    timeLine.log("done building CSS data");
 
     // Creating new stylesheet
     if (cssData)
     {
+      timeLine.log("start inserting stylesheet");
       try {
         this.url = ioService.newURI("data:text/css;charset=utf8,/*** Adblock Plus ***/" + encodeURIComponent("\n" + cssData), null, null);
         styleService.loadAndRegisterSheet(this.url, styleService.USER_SHEET);
       } catch(e) {};
+      timeLine.log("done inserting stylesheet");
     }
+    timeLine.leave("elemhide.apply() done");
   },
 
   /**
    * Unapplies current stylesheet URL
    */
-  unapply: function() {
+  unapply: function()
+  {
     if (this.url) {
       try {
         styleService.unregisterSheet(this.url, styleService.USER_SHEET);
       } catch (e) {}
       this.url = null;
     }
-  }
+  },
+
+  //
+  // Factory implementation
+  //
+
+  createInstance: function(outer, iid)
+  {
+    if (outer != null)
+      throw Cr.NS_ERROR_NO_AGGREGATION;
+
+    return this.QueryInterface(iid);
+  },
+
+  //
+  // Protocol handler implementation
+  //
+  defaultPort: -1,
+  protocolFlags: Ci.nsIProtocolHandler.URI_STD |
+                 Ci.nsIProtocolHandler.URI_DANGEROUS_TO_LOAD |
+                 Ci.nsIProtocolHandler.URI_NON_PERSISTABLE,
+  scheme: "abp-elemhidehit-" + Math.random().toFixed(15).substr(5),
+  allowPort: function() {return false},
+
+  newURI: function(spec, originCharset, baseURI)
+  {
+    var url = Cc["@mozilla.org/network/standard-url;1"].createInstance(Ci.nsIStandardURL);
+    url.init(Ci.nsIStandardURL.URLTYPE_STANDARD,
+              0, spec, originCharset, baseURI);
+    return url;
+  },
+
+  newChannel: function(uri)
+  {
+    if (!/:\/+(\d+)\//.test(uri.spec))
+      throw Cr.NS_ERROR_FAILURE;
+
+    return new HitRegistrationChannel(uri, RegExp.$1);
+  },
+
+  QueryInterface: XPCOMUtils.generateQI([Ci.nsIFactory, Ci.nsIProtocolHandler])
 };
 abp.elemhide = elemhide;
+
+function HitRegistrationChannel(uri, key)
+{
+  this.key = key;
+  this.URI = this.originalURI = uri;
+}
+HitRegistrationChannel.prototype = {
+  key: null,
+  URI: null,
+  originalURI: null,
+  contentCharset: "utf-8",
+  contentLength: 0,
+  contentType: "text/xml",
+  owner: null,
+  securityInfo: null,
+  notificationCallbacks: null,
+  loadFlags: 0,
+  loadGroup: null,
+  name: null,
+  status: Cr.NS_OK,
+
+  asyncOpen: function(listener, context)
+  {
+    let data = "<bindings xmlns='http://www.mozilla.org/xbl'><binding id='dummy'/></bindings>";
+    let filter = elemhide.keys[this.key];
+    if (filter)
+    {
+      let wnd = getRequestWindow(this);
+      if (wnd && wnd.document && !policy.processNode(wnd, wnd.document, policy.type.ELEMHIDE, filter))
+        data = "<nada/>";
+    }
+
+    let stream = Cc["@mozilla.org/io/string-input-stream;1"].createInstance(Ci.nsIStringInputStream);
+    stream.setData(data, data.length);
+
+    runAsync(function()
+    {
+      try {
+        listener.onStartRequest(this, context);
+      } catch(e) {}
+      try {
+        listener.onDataAvailable(this, context, stream, 0, data.length);
+      } catch(e) {}
+      try {
+        listener.onStopRequest(this, context, Cr.NS_OK);
+      } catch(e) {}
+    }, this);
+  },
+
+  open: function()
+  {
+    throw Cr.NS_ERROR_NOT_IMPLEMENTED;
+  },
+  isPending: function()
+  {
+    return false;
+  },
+  cancel: function()
+  {
+    throw Cr.NS_ERROR_NOT_IMPLEMENTED;
+  },
+  suspend: function()
+  {
+    throw Cr.NS_ERROR_NOT_IMPLEMENTED;
+  },
+  resume: function()
+  {
+    throw Cr.NS_ERROR_NOT_IMPLEMENTED;
+  },
+
+  QueryInterface: XPCOMUtils.generateQI([Ci.nsIChannel, Ci.nsIRequest])
+};

@@ -8,14 +8,15 @@
 <!ENTITY filter.label "Filtro">
 <!ENTITY state.label "Estado">
 <!ENTITY size.label "Tamaño">
+<!ENTITY docDomain.label "Documento fonte">
 <!ENTITY noitems.label "Non hai temas bloqueables">
 <!ENTITY whitelisted.label "Páxina da Lista Branca">
-<!ENTITY notloaded.label "Adblock Plus non se instalou correctamente">
 <!ENTITY tooltip.address.label "Enderezo:">
 <!ENTITY tooltip.type.label "Tipo">
 <!ENTITY tooltip.type.blocked "(bloqueado)">
 <!ENTITY tooltip.type.whitelisted "(engadido á lista branca)">
 <!ENTITY tooltip.size.label "Tamaño:">
+<!ENTITY tooltip.docDomain.label "Documento fonte:">
 <!ENTITY tooltip.filter.label "Filtro en vigor:">
 <!ENTITY tooltip.filterSource.label "Fonte do filtro:">
 <!ENTITY context.block.label "Bloquear este tema">
@@ -23,6 +24,7 @@
 <!ENTITY context.whitelist.label "Engadir excepción para o tema">
 <!ENTITY context.disablefilter.label "Desactivar filtro --">
 <!ENTITY context.enablefilter.label "Activar filtro --">
+<!ENTITY context.disablefilteronsite.label "Desactivar este filtro en --">
 <!ENTITY context.open.label "Abrir nun novo separador">
 <!ENTITY context.flash.label "Bordos do tema Flash">
 <!ENTITY context.copy.label "Copiar o enderezo do tema">

@@ -15,7 +15,7 @@
  *
  * The Initial Developer of the Original Code is
  * Wladimir Palant.
- * Portions created by the Initial Developer are Copyright (C) 2006-2008
+ * Portions created by the Initial Developer are Copyright (C) 2006-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -24,18 +24,13 @@
 
 /**
  * Content policy implementation, responsible for blocking things.
- * This file is included from nsAdblockPlus.js.
+ * This file is included from AdblockPlus.js.
  */
 
-var effectiveTLD = null;
-if ("nsIEffectiveTLDService" in Components.interfaces)
-{
-  effectiveTLD = Components.classes["@mozilla.org/network/effective-tld-service;1"]
-                           .getService(Components.interfaces.nsIEffectiveTLDService);
-}
+var effectiveTLD = Cc["@mozilla.org/network/effective-tld-service;1"].getService(Ci.nsIEffectiveTLDService);
 
-const ok = Components.interfaces.nsIContentPolicy.ACCEPT;
-const block = Components.interfaces.nsIContentPolicy.REJECT_SERVER;
+const ok = Ci.nsIContentPolicy.ACCEPT;
+const block = Ci.nsIContentPolicy.REJECT_REQUEST;
 
 var policy =
 {
@@ -54,6 +49,11 @@ var policy =
    * @type Object
    */
   localizedDescr: null,
+  /**
+   * Lists the non-visual content types.
+   * @type Object
+   */
+  nonVisual: null,
 
   /**
    * Map containing all schemes that should be ignored by content policy.
@@ -61,14 +61,35 @@ var policy =
    */
   whitelistSchemes: null,
 
+  /**
+   * Randomly generated class for object tab nodes.
+   * @type String
+   */
+  objtabClass: null,
+  /**
+   * Randomly generated class for object tab nodes displayed on top of the object.
+   * @type String
+   */
+  objtabOnTopClass: null,
+  /**
+   * Randomly generated property name to be set for object tab nodes.
+   * @type String
+   */
+  objtabMarker: null,
+  /**
+   * Randomly generated class for collapsed nodes.
+   * @type String
+   */
+  collapsedClass: null,
+
   init: function() {
-    var types = ["OTHER", "SCRIPT", "IMAGE", "STYLESHEET", "OBJECT", "SUBDOCUMENT", "DOCUMENT", "XBL", "PING", "XMLHTTPREQUEST", "OBJECT_SUBREQUEST", "DTD", "MEDIA"];
+    var types = ["OTHER", "SCRIPT", "IMAGE", "STYLESHEET", "OBJECT", "SUBDOCUMENT", "DOCUMENT", "XBL", "PING", "XMLHTTPREQUEST", "OBJECT_SUBREQUEST", "DTD", "FONT", "MEDIA"];
 
     // type constant by type description and type description by type constant
     this.type = {};
     this.typeDescr = {};
     this.localizedDescr = {};
-    var iface = Components.interfaces.nsIContentPolicy;
+    var iface = Ci.nsIContentPolicy;
     for each (let typeName in types)
     {
       if ("TYPE_" + typeName in iface)
@@ -87,10 +108,29 @@ var policy =
     this.typeDescr[0xFFFD] = "ELEMHIDE";
     this.localizedDescr[0xFFFD] = abp.getString("type_label_elemhide");
 
+    this.nonVisual = {};
+    for each (let type in ["SCRIPT", "STYLESHEET", "XBL", "PING", "XMLHTTPREQUEST", "OBJECT_SUBREQUEST", "DTD", "FONT"])
+      this.nonVisual[this.type[type]] = true;
+
     // whitelisted URL schemes
     this.whitelistSchemes = {};
     for each (var scheme in prefs.whitelistschemes.toLowerCase().split(" "))
       this.whitelistSchemes[scheme] = true;
+
+    // Generate identifiers for object tabs
+    this.objtabClass = "";
+    this.objtabOnTopClass = "";
+    this.collapsedClass = "";
+    this.objtabMarker = "abpObjTab"
+    for (let i = 0; i < 20; i++)
+    {
+      this.objtabClass += String.fromCharCode("a".charCodeAt(0) + Math.random() * 26);
+      this.objtabOnTopClass += String.fromCharCode("a".charCodeAt(0) + Math.random() * 26);
+      this.collapsedClass +=  String.fromCharCode("a".charCodeAt(0) + Math.random() * 26);
+      this.objtabMarker += String.fromCharCode("a".charCodeAt(0) + Math.random() * 26);
+    }
+
+    this.initObjectTabCSS();
   },
 
   /**
@@ -128,54 +168,53 @@ var policy =
       contentType = this.type.BACKGROUND;
 
     // Fix type for objects misrepresented as frames or images
-    if (contentType != this.type.OBJECT && (node instanceof Components.interfaces.nsIDOMHTMLObjectElement || node instanceof Components.interfaces.nsIDOMHTMLEmbedElement))
+    if (contentType != this.type.OBJECT && (node instanceof Ci.nsIDOMHTMLObjectElement || node instanceof Ci.nsIDOMHTMLEmbedElement))
       contentType = this.type.OBJECT;
 
-    var data = DataContainer.getDataForWindow(wnd);
+    let docDomain = this.getHostname(wnd.location.href);
+    if (!match && contentType == this.type.ELEMHIDE)
+    {
+      match = location;
+      locationText = match.text.replace(/^.*?#/, '#');
+      location = locationText;
+
+      if (!match.isActiveOnDomain(docDomain))
+        return true;
+    }
+
+    var data = RequestList.getDataForWindow(wnd);
 
     var objTab = null;
-    let docDomain = this.getHostname(wnd.location.href);
-    let thirdParty = this.isThirdParty(location, docDomain);
-
-    if (!match && location.scheme == "chrome" && location.host == "global" && /abphit:(\d+)#/.test(location.path) && RegExp.$1 in elemhide.keys)
-    {
-      match = elemhide.keys[RegExp.$1];
-      contentType = this.type.ELEMHIDE;
-      locationText = match.text.replace(/^.*?#/, '#');
-    }
+    let thirdParty = (contentType == this.type.ELEMHIDE ? false : this.isThirdParty(location, docDomain));
 
     if (!match && prefs.enabled) {
       match = whitelistMatcher.matchesAny(locationText, this.typeDescr[contentType] || "", docDomain, thirdParty);
       if (match == null)
         match = blacklistMatcher.matchesAny(locationText, this.typeDescr[contentType] || "", docDomain, thirdParty);
 
-      if (match instanceof BlockingFilter && node)
+      if (match instanceof BlockingFilter && node instanceof Element && !(contentType in this.nonVisual))
       {
         var prefCollapse = (match.collapse != null ? match.collapse : !prefs.fastcollapse);
         if (collapse || prefCollapse)
-          wnd.setTimeout(postProcessNode, 0, node);
+          this.schedulePostProcess(node);
       }
 
       // Show object tabs unless this is a standalone object
       if (!match && prefs.frameobjects && contentType == this.type.OBJECT &&
-          node.ownerDocument && /^text\/|[+\/]xml$/.test(node.ownerDocument.contentType)) {
+          node.ownerDocument && /^text\/|[+\/]xml$/.test(node.ownerDocument.contentType))
+      {
         // Before adding object tabs always check whether one exist already
-        var hasObjectTab = false;
-        var loc = data.getLocation(this.type.OBJECT, locationText);
-        if (loc)
-          for (var i = 0; i < loc.nodes.length; i++)
-            if (loc.nodes[i] == node && i < loc.nodes.length - 1 && "abpObjTab" in loc.nodes[i+1])
-              hasObjectTab = true;
-
-        if (!hasObjectTab) {
+        let hasObjectTab = (node.nextSibling && node.nextSibling.getUserData(this.objtabMarker));
+        if (!hasObjectTab)
+        {
           objTab = node.ownerDocument.createElementNS("http://www.w3.org/1999/xhtml", "a");
-          objTab.abpObjTab = true;
+          objTab.setUserData(this.objtabMarker, true, null);
         }
       }
     }
 
     // Store node data
-    var nodeData = data.addNode(topWnd, node, contentType, docDomain, thirdParty, locationText, match, objTab);
+    var nodeData = data.addNode(node, contentType, docDomain, thirdParty, locationText, match, objTab);
     if (match)
       filterStorage.increaseHitCount(match);
     if (objTab)
@@ -185,15 +224,68 @@ var policy =
   },
 
   /**
+   * Nodes scheduled for post-processing (might be null).
+   * @type Array of Node
+   */
+  _scheduledNodes: null,
+
+  /**
+   * Schedules a node for post-processing.
+   * @type Array of Node
+   */
+  schedulePostProcess: function(node)
+  {
+    if (this._scheduledNodes)
+      this._scheduledNodes.push(node);
+    else
+    {
+      this._scheduledNodes = [node];
+      runAsync(this.postProcessNodes, this);
+    }
+  },
+
+  /**
+   * Processes nodes scheduled for post-processing (typically hides them).
+   * @type Array of Node
+   */
+  postProcessNodes: function()
+  {
+    let nodes = this._scheduledNodes;
+    this._scheduledNodes = null;
+
+    for each (let node in nodes)
+    {
+      // adjust frameset's cols/rows for frames
+      let parentNode = node.parentNode;
+      if (parentNode && parentNode instanceof Ci.nsIDOMHTMLFrameSetElement)
+      {
+        let hasCols = (parentNode.cols && parentNode.cols.indexOf(",") > 0);
+        let hasRows = (parentNode.rows && parentNode.rows.indexOf(",") > 0);
+        if ((hasCols || hasRows) && !(hasCols && hasRows))
+        {
+          let index = -1;
+          for (let frame = node; frame; frame = frame.previousSibling)
+            if (frame instanceof Ci.nsIDOMHTMLFrameElement || frame instanceof Ci.nsIDOMHTMLFrameSetElement)
+              index++;
+      
+          let property = (hasCols ? "cols" : "rows");
+          let weights = parentNode[property].split(",");
+          weights[index] = "0";
+          parentNode[property] = weights.join(",");
+        }
+      }
+      else
+        node.className += " " + this.collapsedClass;
+    }
+  },
+
+  /**
    * Checks whether the location's scheme is blockable.
    * @param location  {nsIURI}
    * @return {Boolean}
    */
-  isBlockableScheme: function(location) {
-    // HACK: Allow blocking element hiding hits
-    if (location.scheme == "chrome" && location.host == "global" && /abphit:(\d+)#/.test(location.path) && RegExp.$1 in elemhide.keys)
-      return true;
-
+  isBlockableScheme: function(location)
+  {
     return !(location.scheme in this.whitelistSchemes);
   },
 
@@ -233,12 +325,12 @@ var policy =
       // Thunderbird branch
       try
       {
-        let mailWnd = wnd.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-                         .getInterface(Components.interfaces.nsIWebNavigation)
-                         .QueryInterface(Components.interfaces.nsIDocShellTreeItem)
+        let mailWnd = wnd.QueryInterface(Ci.nsIInterfaceRequestor)
+                         .getInterface(Ci.nsIWebNavigation)
+                         .QueryInterface(Ci.nsIDocShellTreeItem)
                          .rootTreeItem
-                         .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-                         .getInterface(Components.interfaces.nsIDOMWindow);
+                         .QueryInterface(Ci.nsIInterfaceRequestor)
+                         .getInterface(Ci.nsIDOMWindow);
 
         // Typically we get a wrapped mail window here, need to unwrap
         try
@@ -250,13 +342,12 @@ var policy =
         {
           return this.isWhitelisted(mailWnd.currentHeaderData["content-base"].headerValue);
         }
-        else if ("gDBView" in mailWnd)
+        else if ("currentHeaderData" in mailWnd && "from" in mailWnd.currentHeaderData)
         {
-          let msgHdr = mailWnd.gDBView.hdrForFirstSelectedMessage;
-          let emailAddress = headerParser.extractHeaderAddressMailboxes(null, msgHdr.author);
+          let emailAddress = headerParser.extractHeaderAddressMailboxes(mailWnd.currentHeaderData.from.headerValue);
           if (emailAddress)
           {
-            emailAddress = 'mailto:' + emailAddress.replace(/^[\s"]+/, "").replace(/[\s"]+$/, "").replace(' ', '%20');
+            emailAddress = 'mailto:' + emailAddress.replace(/^[\s"]+/, "").replace(/[\s"]+$/, "").replace(/\s/g, '%20');
             return this.isWhitelisted(emailAddress);
           }
         }
@@ -278,33 +369,92 @@ var policy =
     if (!location || !docDomain)
       return true;
 
-    try 
+    try
     {
-      if (effectiveTLD)
-      {
-        try {
-          return effectiveTLD.getBaseDomain(location) != effectiveTLD.getBaseDomainFromHost(docDomain);
-        }
-        catch (e) {
-          // EffectiveTLDService throws on IP addresses
-          return location.host != docDomain;
-        }
-      }
-      else
-      {
-        // Stupid fallback algorithm for Gecko 1.8
-        return location.host.replace(/.*?((?:[^.]+\.)?[^.]+\.?)$/, "$1") != docDomain.replace(/.*?((?:[^.]+\.)?[^.]+\.?)$/, "$1");
-      }
+      return effectiveTLD.getBaseDomain(location) != effectiveTLD.getBaseDomainFromHost(docDomain);
     }
-    catch (e2)
+    catch (e)
     {
-      // nsSimpleURL.host will throw, treat those URLs as third-party
-      return true;
+      // EffectiveTLDService throws on IP addresses, just compare the host name
+      let host = "";
+      try
+      {
+        host = location.host;
+      } catch (e) {}
+      return host != docDomain;
     }
   },
 
+  /**
+   * Updates position of an object tab to match the object
+   */
+  repositionObjectTab: function(/**Element*/ objTab)
+  {
+    let object = objTab.previousSibling;
+    if (!(object instanceof Ci.nsIDOMHTMLObjectElement || object instanceof Ci.nsIDOMHTMLEmbedElement || object instanceof Ci.nsIDOMHTMLAppletElement))
+    {
+      if (objTab.parentNode)
+        objTab.parentNode.removeChild(objTab);
+      return;
+    }
+
+    let doc = objTab.ownerDocument;
+
+    let objectRect = object.getBoundingClientRect();
+    let tabRect = objTab.getBoundingClientRect();
+
+    let onTop = (objectRect.top > tabRect.bottom - tabRect.top + 5);
+    let leftDiff = objectRect.right - tabRect.right;
+    let topDiff = (onTop ? objectRect.top - tabRect.bottom : objectRect.bottom - tabRect.top);
+
+    objTab.style.setProperty("left", ((parseInt(objTab.style.left) || 0) + leftDiff) + "px", "important");
+    objTab.style.setProperty("top", ((parseInt(objTab.style.top) || 0) + topDiff) + "px", "important");
+    objTab.className = (onTop ? this.objtabClass + " " + this.objtabOnTopClass : this.objtabClass);
+    objTab.style.removeProperty("visibility");
+  },
+
+  /**
+   * Loads objtabs.css on startup and registers it globally.
+   */
+  initObjectTabCSS: function()
+  {
+    // Load CSS asynchronously (synchronous loading at startup causes weird issues)
+    try {
+      let channel = ioService.newChannel("chrome://adblockplus/content/objtabs.css", null, null);
+      channel.asyncOpen({
+        data: "",
+        onDataAvailable: function(request, context, stream, offset, count)
+        {
+          let scriptableStream = Cc["@mozilla.org/scriptableinputstream;1"].createInstance(Ci.nsIScriptableInputStream);
+          scriptableStream.init(stream);
+          this.data += scriptableStream.read(count);
+        },
+        onStartRequest: function() {},
+        onStopRequest: function()
+        {
+          let data = this.data.replace(/%%CLASSNAME%%/g, policy.objtabClass).replace(/%%ONTOP%%/g, policy.objtabOnTopClass).replace(/%%COLLAPSED%%/g, policy.collapsedClass);
+          let objtabsCSS = makeURL("data:text/css," + encodeURIComponent(data));
+          Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService)
+                                                          .loadAndRegisterSheet(objtabsCSS, styleService.USER_SHEET);
+          channel = null;
+        },
+        QueryInterface: XPCOMUtils.generateQI([Ci.nsIRequestObserver, Ci.nsIStreamListener])
+      }, null);
+    } catch (e) {}
+  },
+
+  //
+  // nsISupports interface implementation
+  //
+
+  QueryInterface: abp.QueryInterface,
+
+  //
   // nsIContentPolicy interface implementation
-  shouldLoad: function(contentType, contentLocation, requestOrigin, node, mimeTypeGuess, extra) {
+  //
+
+  shouldLoad: function(contentType, contentLocation, requestOrigin, node, mimeTypeGuess, extra)
+  {
     // return unless we are initialized
     if (!this.whitelistSchemes)
       return ok;
@@ -318,17 +468,17 @@ var policy =
 
     var location = unwrapURL(contentLocation);
 
-    // Only block in content windows (Gecko 1.8 compatibility)
-    var wndType = wnd.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-                     .getInterface(Components.interfaces.nsIWebNavigation)
-                     .QueryInterface(Components.interfaces.nsIDocShellTreeItem)
-                     .itemType;
-    if (wndType != Components.interfaces.nsIDocShellTreeItem.typeContent && !(location.scheme == "chrome" && location.host == "global" && /abphit:(\d+)#/.test(location.path)))
-      return ok;
-
     // Interpret unknown types as "other"
     if (!(contentType in this.typeDescr))
       contentType = this.type.OTHER;
+
+    if (contentType == this.type.IMAGE && location.spec == "chrome://global/content/abp-dummy-image-request.png")
+    {
+      let objTab = node.parentNode;
+      if (objTab && objTab.getUserData(this.objtabMarker))
+        runAsync(this.repositionObjectTab, this, objTab);
+      return block;
+    }
 
     // if it's not a blockable type or a whitelisted scheme, use the usual policy
     if (contentType == this.type.DOCUMENT || !this.isBlockableScheme(location))
@@ -337,8 +487,62 @@ var policy =
     return (this.processNode(wnd, node, contentType, location, false) ? ok : block);
   },
 
-  shouldProcess: function(contentType, contentLocation, requestOrigin, insecNode, mimeType, extra) {
+  shouldProcess: function(contentType, contentLocation, requestOrigin, insecNode, mimeType, extra)
+  {
     return ok;
+  },
+
+  //
+  // nsIChannelEventSink interface implementation
+  //
+
+  onChannelRedirect: function(oldChannel, newChannel, flags)
+  {
+    try {
+      let oldLocation = null;
+      let newLocation = null;
+      try {
+        oldLocation = oldChannel.originalURI.spec;
+        newLocation = newChannel.URI.spec;
+      }
+      catch(e2) {}
+
+      if (!oldLocation || !newLocation || oldLocation == newLocation)
+        return;
+
+      // Look for the request both in the origin window and in its parent (for frames)
+      let contexts = [getRequestWindow(newChannel)];
+      if (!contexts[0])
+        contexts.pop();
+      else if (contexts[0] && contexts[0].parent != contexts[0])
+        contexts.push(contexts[0].parent);
+
+      let info = null;
+      for each (let context in contexts)
+      {
+        // Did we record the original request in its own window?
+        let data = RequestList.getDataForWindow(context, true);
+        if (data)
+          info = data.getURLInfo(oldLocation);
+
+        if (info)
+        {
+          let nodes = info.nodes;
+          let node = (nodes.length > 0 ? nodes[nodes.length - 1] : context.document);
+
+          // HACK: NS_BINDING_ABORTED would be proper error code to throw but this will show up in error console (bug 287107)
+          if (!this.processNode(context, node, info.type, newChannel.URI))
+            throw Cr.NS_BASE_STREAM_WOULD_BLOCK;
+          else
+            return;
+        }
+      }
+    }
+    catch (e if (e != Cr.NS_BASE_STREAM_WOULD_BLOCK))
+    {
+      // We shouldn't throw exceptions here - this will prevent the redirect.
+      dump("Adblock Plus: Unexpected error in policy.onChannelRedirect: " + e + "\n");
+    }
   },
 
   // Reapplies filters to all nodes of the window
@@ -346,36 +550,38 @@ var policy =
     if (wnd.closed)
       return;
 
-    var wndData = abp.getDataForWindow(wnd);
+    var wndData = RequestList.getDataForWindow(wnd);
     var data = wndData.getAllLocations();
     for (var i = start; i < data.length; i++) {
       if (i - start >= 20) {
         // Allow events to process
-        createTimer(function() {policy.refilterWindowInternal(wnd, i)}, 0);
+        runAsync(this.refilterWindowInternal, this, wnd, i);
         return;
       }
 
-      if (!data[i].filter || data[i].filter instanceof WhitelistFilter) {
-        var nodes = data[i].nodes;
-        data[i].nodes = [];
-        for (var j = 0; j < nodes.length; j++) {
-          if ("abpObjTab" in nodes[j]) {
+      if (!data[i].filter || data[i].filter instanceof WhitelistFilter)
+      {
+        let nodes = data[i].clearNodes();
+        for each (let node in nodes)
+        {
+          if (node.getUserData(this.objtabMarker))
+          {
             // Remove object tabs
-            if (nodes[j].parentNode)
-              nodes[j].parentNode.removeChild(nodes[j]);
+            if (node.parentNode)
+              node.parentNode.removeChild(node);
           }
           else
-            this.processNode(wnd, nodes[j], data[i].type, makeURL(data[i].location), true);
+            this.processNode(wnd, node, data[i].type, makeURL(data[i].location), true);
         }
       }
     }
 
-    abp.DataContainer.notifyListeners(wnd, "invalidate", data);
+    wndData.notifyListeners("invalidate", data);
   },
 
   // Calls refilterWindowInternal delayed to allow events to process
   refilterWindow: function(wnd) {
-    createTimer(function() {policy.refilterWindowInternal(wnd, 0)}, 0);
+    runAsync(this.refilterWindowInternal, this, wnd, 0);
   }
 };
 

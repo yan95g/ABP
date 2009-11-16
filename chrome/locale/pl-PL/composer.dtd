@@ -5,9 +5,12 @@
 <!ENTITY disabled.warning.beforeLink "Adblock Plus jest wyłączony. Można dodawać filtry, ale nie będą one działały do czasu">
 <!ENTITY disabled.warning.link "włączenia Adblock Plusa">
 <!ENTITY disabled.warning.afterLink ".">
+<!ENTITY groupDisabled.warning.beforeLink "Grupa filtrów &quot;&amp;#x25;S&quot;, do której ten filtr powinien zostać dodany jest wyłączona. Można dodać ten filtr, ale nie będzie działał do czasu">
+<!ENTITY groupDisabled.warning.link "włączenia grupy">
+<!ENTITY groupDisabled.warning.afterLink ".">
 <!ENTITY filter.label "Nowy filtr:">
 <!ENTITY filter.accesskey "F">
-<!ENTITY preferences.label "Wyświetl istniejące filtry...">
+<!ENTITY preferences.label "Wyświetl istniejące filtry…">
 <!ENTITY preferences.accesskey "S">
 <!ENTITY type.filter.label "Filtr blokujący">
 <!ENTITY type.filter.accesskey "B">
@@ -21,7 +24,11 @@
 <!ENTITY custom.pattern.accesskey "D">
 <!ENTITY anchors.label "Akceptuj wzorzec tylko:">
 <!ENTITY anchor.start.label "na początku adresu">
+<!--  Note: This access key should usually be the same as anchor.start.flexible.accesskey. It is the same checkbox with different label depending on suggested filter. -->
 <!ENTITY anchor.start.accesskey "o">
+<!ENTITY anchor.start.flexible.label "na początku nazwy domeny">
+<!--  Note: This access key should usually be the same as anchor.start.accesskey. It is the same checkbox with different label depending on suggested filter. -->
+<!ENTITY anchor.start.flexible.accesskey "o">
 <!ENTITY anchor.end.label "na końcu adresu">
 <!ENTITY anchor.end.accesskey "k">
 <!ENTITY options.label "Opcje">

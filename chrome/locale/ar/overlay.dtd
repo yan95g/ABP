@@ -1,14 +1,14 @@
-<!ENTITY notloaded.label "لم يتم التحميل">
-<!ENTITY notloaded.tooltip "لم يتم تحميل هذه الإضافة، ربما لم يتم إعدادها جيداً">
 <!ENTITY status.tooltip "الحالة">
 <!ENTITY blocked.tooltip "العناصر المحجوبة في هذه الصفحة">
 <!ENTITY filters.tooltip "الفلاتر الأكثر فعالية">
-<!ENTITY menuitem.label "آدبلوك بلاس">
+<!ENTITY menuitem.label "تفضيلات آدبلوك بلس">
 <!ENTITY menuitem.accesskey "ب">
+<!ENTITY toolbarbutton.label "آدبلوك بلس">
 <!ENTITY view.blockableItems.label "آدبلوك بلس: العناصر المحجوبة">
 <!ENTITY context.image.label "صورة آدبلوك">
 <!ENTITY context.object.label "عنصر آدبلوك">
 <!ENTITY context.frame.label "إطار آدبلوك">
+<!ENTITY context.removeWhitelist.label "آدبلوك بلس : إعادة التفعيل في هذه الصفحة">
 <!ENTITY sidebar.title "العناصر المحجوبة في الصفحة الحالية">
 <!ENTITY settings.label "تفضيلات">
 <!ENTITY settings.accesskey "ض">

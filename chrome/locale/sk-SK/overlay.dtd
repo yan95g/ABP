@@ -1,5 +1,3 @@
-<!ENTITY notloaded.label "Nenačítaný">
-<!ENTITY notloaded.tooltip "Prvky Adblock Plus nemohli byť načítané, je možné, že nie je nainštalovaný správne.">
 <!ENTITY status.tooltip "Stav:">
 <!ENTITY blocked.tooltip "Blokovať položky na tejto stránke:">
 <!ENTITY filters.tooltip "Najaktívnejšie filtre:">
@@ -10,11 +8,12 @@
 <!ENTITY context.image.label "Adblock obrázok">
 <!ENTITY context.object.label "Adblock objekt">
 <!ENTITY context.frame.label "Adblock rámec">
+<!ENTITY context.removeWhitelist.label "Adblock Plus: Znovu zapnúť túto stránku">
 <!ENTITY sidebar.title "Blokovateľné položky na aktuálnej stránke">
 <!ENTITY settings.label "Nastavenia">
 <!ENTITY settings.accesskey "N">
 <!ENTITY opensidebar.label "Otvoriť blokovateľné položky">
-<!ENTITY opensidebar.accesskey "B">
+<!ENTITY opensidebar.accesskey "b">
 <!ENTITY closesidebar.label "Zatvoriť blokovateľné položky">
 <!ENTITY closesidebar.accesskey "B">
 <!ENTITY whitelist.site.label "Vypnúť na --">

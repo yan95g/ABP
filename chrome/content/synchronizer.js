@@ -15,7 +15,7 @@
  *
  * The Initial Developer of the Original Code is
  * Wladimir Palant.
- * Portions created by the Initial Developer are Copyright (C) 2006-2008
+ * Portions created by the Initial Developer are Copyright (C) 2006-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -24,7 +24,7 @@
 
 /*
  * Manages synchronization of filter subscriptions.
- * This file is included from nsAdblockPlus.js.
+ * This file is included from AdblockPlus.js.
  */
 
 var XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIJSXMLHttpRequest");
@@ -44,12 +44,14 @@ var synchronizer =
   init: function()
   {
     let me = this;
-    let timer = createTimer(function()
+    let callback = function()
     {
-      timer.delay = 3600000;
+      me.timer.delay = 3600000;
       me.checkSubscriptions();
-    }, 300000);
-    timer.type = timer.TYPE_REPEATING_SLACK;
+    };
+
+    this.timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
+    this.timer.initWithCallback(callback, 300000, Ci.nsITimer.TYPE_REPEATING_SLACK);
   },
 
   /**
@@ -224,18 +226,11 @@ var synchronizer =
       var oldEventSink = null;
       request.channel.notificationCallbacks =
       {
-        QueryInterface: function(iid)
-        {
-          if (iid.equals(Components.interfaces.nsISupports) ||
-              iid.equals(Components.interfaces.nsIChannelEventSink))
-            return this;
-      
-          throw Components.results.NS_ERROR_NO_INTERFACE;
-        },
+        QueryInterface: XPCOMUtils.generateQI([Ci.nsIChannelEventSink]),
 
         getInterface: function(iid)
         {
-          if (iid.equals(Components.interfaces.nsIChannelEventSink))
+          if (iid.equals(Ci.nsIChannelEventSink))
           {
             try {
               oldEventSink = oldNotifications.QueryInterface(iid);
@@ -248,7 +243,7 @@ var synchronizer =
 
         onChannelRedirect: function(oldChannel, newChannel, flags)
         {
-          if (flags & Components.interfaces.nsIChannelEventSink.REDIRECT_TEMPORARY)
+          if (flags & Ci.nsIChannelEventSink.REDIRECT_TEMPORARY)
             hadTemporaryRedirect = true;
           else if (!hadTemporaryRedirect)
             newURL = newChannel.URI.spec;
@@ -340,6 +335,8 @@ var synchronizer =
         for (let key in subscription)
           newSubscription[key] = subscription[key];
 
+        delete Subscription.knownSubscriptions[subscription.url];
+        newSubscription.oldSubscription = subscription;
         subscription = newSubscription;
         subscription.url = url;
 
@@ -351,6 +348,7 @@ var synchronizer =
         filterStorage.updateSubscriptionFilters(subscription, newFilters);
       else
         filterStorage.triggerSubscriptionObservers("updateinfo", [subscription]);
+      delete subscription.oldSubscription;
 
       filterStorage.saveToDisk();
     };
@@ -367,6 +365,4 @@ var synchronizer =
     }
   }
 };
-
-synchronizer.init();
 abp.synchronizer = synchronizer;

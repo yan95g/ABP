@@ -1,27 +1,3 @@
-<!-- ***** BEGIN LICENSE BLOCK *****
-   - Version: MPL 1.1
-   -
-   - The contents of this file are subject to the Mozilla Public License Version
-   - 1.1 (the "License"); you may not use this file except in compliance with
-   - the License. You may obtain a copy of the License at
-   - http://www.mozilla.org/MPL/
-   -
-   - Software distributed under the License is distributed on an "AS IS" basis,
-   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
-   - for the specific language governing rights and limitations under the
-   - License.
-   -
-   - The Original Code is Adblock Plus.
-   -
-   - The Initial Developer of the Original Code is
-   - Wladimir Palant.
-   - Portions created by the Initial Developer are Copyright (C) 2006-2008
-   - the Initial Developer. All Rights Reserved.
-   -
-   - Contributor(s):
-   -
-   - ***** END LICENSE BLOCK ***** -->
-
 <!ENTITY dialog.title             "Add Adblock Plus filter rule">
 <!ENTITY accept.label             "Add filter">
 <!ENTITY advanced.label           "Advanced view">
@@ -30,6 +6,10 @@
 <!ENTITY disabled.warning.beforeLink  "Adblock Plus is currently disabled. You can still add filters but those will not be applied unless you ">
 <!ENTITY disabled.warning.link    "enable Adblock Plus">
 <!ENTITY disabled.warning.afterLink   ".">
+
+<!ENTITY groupDisabled.warning.beforeLink  "The filter group &quot;&#x25;S&quot; that this filter should be added to is currently disabled. You can still add the filter but it will not be applied unless you ">
+<!ENTITY groupDisabled.warning.link        "enable the filter group">
+<!ENTITY groupDisabled.warning.afterLink   ".">
 
 <!ENTITY filter.label             "New filter:">
 <!ENTITY filter.accesskey         "f">
@@ -47,7 +27,11 @@
 <!ENTITY custom.pattern.accesskey "C">
 <!ENTITY anchors.label            "Accept pattern only:">
 <!ENTITY anchor.start.label       "at the beginning of the address">
+<!-- Note: This access key should usually be the same as anchor.start.flexible.accesskey. It is the same checkbox with different label depending on suggested filter.-->
 <!ENTITY anchor.start.accesskey   "g">
+<!ENTITY anchor.start.flexible.label      "at the beginning of the domain name">
+<!-- Note: This access key should usually be the same as anchor.start.accesskey. It is the same checkbox with different label depending on suggested filter.-->
+<!ENTITY anchor.start.flexible.accesskey  "g">
 <!ENTITY anchor.end.label         "at the end of the address">
 <!ENTITY anchor.end.accesskey     "n">
 <!ENTITY options.label            "Options">
