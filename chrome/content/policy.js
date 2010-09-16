@@ -198,7 +198,7 @@ var policy =
       }
 
       // Track mouse events for objects
-      if (!match && contentType == this.type.OBJECT)
+      if (!match && contentType == this.type.OBJECT && node instanceof Element)
       {
         node.addEventListener("mouseover", objectMouseEventHander, true);
         node.addEventListener("mouseout", objectMouseEventHander, true);
