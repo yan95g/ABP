@@ -1,0 +1,27 @@
+<!ENTITY status.tooltip "وضعیت:">
+<!ENTITY blocked.tooltip "موارد رد شده در این صفحه:">
+<!ENTITY filters.tooltip "فعالترین پالایه ها:">
+<!ENTITY menuitem.label "ترجیحات فوق تبلیغ شکن">
+<!ENTITY menuitem.accesskey "ب">
+<!ENTITY toolbarbutton.label "فوق تبلیغ شکن">
+<!ENTITY view.blockableItems.label "فوق تبلیغ شکن: موارد قابل انسداد">
+<!ENTITY context.image.label "فوق تبلیغ شکن: سد تصاویر">
+<!ENTITY context.object.label "فوق تبلیغ شکن: سد شیء">
+<!ENTITY context.frame.label "فوق تبلیغ شکن:سد قابک">
+<!ENTITY context.media.label "فوق تبلیغ شکن: سد داده های چند رسانه ای">
+<!ENTITY context.removeWhitelist.label "فوق تبلیغ شکن: فعال شدن مجدد در این صفحه">
+<!ENTITY sidebar.title "موارد قابل مسدود شدن در صفحه جاری">
+<!ENTITY sendReport.label "گزارش مشکل در این صفحه">
+<!ENTITY sendReport.accesskey "ص">
+<!ENTITY settings.label "ترجیحات">
+<!ENTITY settings.accesskey "ج">
+<!ENTITY opensidebar.label "باز کردن موارد قابل ردکردن">
+<!ENTITY opensidebar.accesskey "ق">
+<!ENTITY closesidebar.label "بستن موارد قابل ردکردن">
+<!ENTITY closesidebar.accesskey "ق">
+<!ENTITY whitelist.site.label "غیرفعال در ?1?">
+<!ENTITY whitelist.page.label "غیرفعال فقط در این صفحه">
+<!ENTITY disable.label "غیر فعال کردن در همه جا">
+<!ENTITY recommend.label "ما را در فیس بوک پیشنهاد دهید.">
+<!ENTITY objecttab.title "مسدود کردن">
+<!ENTITY objecttab.tooltip "جهت مسدود کردن با فوق تبلیغ شکن اینجا کلیک کنید">
