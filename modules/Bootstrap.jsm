@@ -92,7 +92,6 @@ let defaultModules = [
   baseURL.spec + "FilterListener.jsm",
   baseURL.spec + "ContentPolicy.jsm",
   baseURL.spec + "Synchronizer.jsm",
-  baseURL.spec + "Survey.jsm",
   baseURL.spec + "Sync.jsm"
 ];
 
