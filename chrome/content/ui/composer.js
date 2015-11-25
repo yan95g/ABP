@@ -118,19 +118,8 @@ function init()
   else
     E("patternGroup").focus();
 
-  let types = [];
-  for (let type in Policy.localizedDescr)
-  {
-    types.push(parseInt(type));
-  }
-  types.sort(function(a, b) {
-    if (a < b)
-      return -1;
-    else if (a > b)
-      return 1;
-    else
-      return 0;
-  });
+  let types = Array.from(Policy.contentTypes);
+  types.sort();
 
   let docDomain = item.docDomain;
   let thirdParty = item.thirdParty;
@@ -145,17 +134,17 @@ function init()
 
   let typeGroup = E("typeGroup");
   let defaultTypes = RegExpFilter.prototype.contentType & ~RegExpFilter.typeMap.DOCUMENT;
-  let isDefaultType = (RegExpFilter.typeMap[item.typeDescr] & defaultTypes) != 0;
+  let isDefaultType = (RegExpFilter.typeMap[item.type] & defaultTypes) != 0;
   for (let type of types)
   {
-    if (type == Policy.type.ELEMHIDE)
+    if (type == "ELEMHIDE")
       continue;
 
     let typeNode = document.createElement("checkbox");
-    typeNode.setAttribute("value", Policy.typeDescr[type].toLowerCase().replace(/\_/g, "-"));
-    typeNode.setAttribute("label", Policy.localizedDescr[type].toLowerCase());
+    typeNode.setAttribute("value", type.toLowerCase().replace(/\_/g, "-"));
+    typeNode.setAttribute("label", Utils.getString("type_label_" + type.toLowerCase()));
 
-    let typeMask = RegExpFilter.typeMap[Policy.typeDescr[type]];
+    let typeMask = RegExpFilter.typeMap[type];
     typeNode._defaultType = (typeMask & defaultTypes) != 0;
     if ((isDefaultType && typeNode._defaultType) || (!isDefaultType && item.type == type))
       typeNode.setAttribute("checked", "true");
@@ -262,9 +251,9 @@ function updateFilter()
   else
   {
     let defaultTypes = RegExpFilter.prototype.contentType & ~RegExpFilter.typeMap.DOCUMENT;
-    let isDefaultType = (RegExpFilter.typeMap[item.typeDescr] & defaultTypes) != 0;
+    let isDefaultType = (RegExpFilter.typeMap[item.type] & defaultTypes) != 0;
     if (!isDefaultType)
-      filter += "$" + item.typeDescr.toLowerCase().replace(/\_/g, "-");
+      filter += "$" + item.type.toLowerCase().replace(/\_/g, "-");
   }
 
   filter = Filter.normalize(filter);
@@ -279,7 +268,7 @@ function updateFilter()
   }
   E("shortpatternWarning").hidden = !isSlow;
 
-  E("matchWarning").hidden = compiledFilter instanceof RegExpFilter && compiledFilter.matches(item.location, RegExpFilter.typeMap[item.typeDescr], item.docDomain, item.thirdParty);
+  E("matchWarning").hidden = compiledFilter instanceof RegExpFilter && compiledFilter.matches(item.location, RegExpFilter.typeMap[item.type], item.docDomain, item.thirdParty);
 
   E("filter").value = filter;
 }
@@ -318,7 +307,7 @@ function updatePatternSelection()
 
   function testFilter(/**String*/ filter) /**Boolean*/
   {
-    return RegExpFilter.fromText(filter + "$" + item.typeDescr).matches(item.location, RegExpFilter.typeMap[item.typeDescr], item.docDomain, item.thirdParty);
+    return RegExpFilter.fromText(filter + "$" + item.type).matches(item.location, RegExpFilter.typeMap[item.type], item.docDomain, item.thirdParty);
   }
 
   let anchorStartCheckbox = E("anchorStart");
