@@ -1,7 +1,7 @@
 [general]
 id={d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}
 basename=adblockplus
-version=2.6.11
+version=2.6.13
 author=Wladimir Palant
 options=chrome://adblockplus/content/ui/settings.xul
 optionsType=2
@@ -39,8 +39,10 @@ adblockbrowser=1.0/1.0
 [mapping]
 chrome/content/ui/firstRun.html = adblockplusui/firstRun.html
 chrome/content/ui/firstRun.js = adblockplusui/firstRun.js
+chrome/content/ui/common.js = adblockplusui/common.js
 chrome/content/ui/i18n.js = adblockplusui/i18n.js
 chrome/content/ui/skin/firstRun.css = adblockplusui/skin/firstRun.css
+chrome/content/ui/skin/common.css = adblockplusui/skin/common.css
 chrome/content/ui/skin/abp-128.png = adblockplusui/skin/abp-128.png
 chrome/content/ui/skin/ajax-loader.gif = adblockplusui/skin/ajax-loader.gif
 chrome/content/ui/skin/background.png = adblockplusui/skin/background.png
